@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react"
+import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { FormData } from "../../../types"
 import Author from '../../../components/authors/Author'
 import { AuthorContext } from "../../../hooks/useAuthor"
@@ -10,7 +10,13 @@ describe('Author component', () => {
         const mockFormData = { name: '', country: '' }
 
         render(
-            <AuthorContext.Provider value={{ formData: mockFormData, setFormData: mockSetFormData }}>
+            <AuthorContext.Provider value={{ 
+                    formData: mockFormData, 
+                    setFormData: mockSetFormData, 
+                    isAlertVisible: false, 
+                    setIsAlertVisible:jest.fn(),
+                }}
+            >
                 <Author />
             </AuthorContext.Provider>
         )
@@ -24,7 +30,7 @@ describe('Author component', () => {
         expect(mockSetFormData).toHaveBeenCalledWith({ name: '', country: 'India' })
     })
 
-    it('Should call addAuthor and reset form data', () => {
+    it('Should call addAuthor and reset form data', async () => {
         const mockSetFormData = jest.fn()
         const mockFormData = { name: "Chetan Bhagat", country: "India" }
         const mockAddAuthor = jest.fn()
@@ -32,7 +38,13 @@ describe('Author component', () => {
 
         render(
             <AuthorDataContext.Provider value={{ addAuthor: mockAddAuthor, authorData: authorData, setAuthorData: jest.fn() }}>
-                <AuthorContext.Provider value={{ formData: mockFormData, setFormData: mockSetFormData }}>
+                <AuthorContext.Provider value={{ 
+                        formData: mockFormData, 
+                        setFormData: mockSetFormData, 
+                        isAlertVisible: false, 
+                        setIsAlertVisible:jest.fn(),
+                    }}
+                >
                     <Author />
                 </AuthorContext.Provider>
             </AuthorDataContext.Provider>
@@ -41,7 +53,10 @@ describe('Author component', () => {
 
         fireEvent.click(submitButton)
         
-        expect(mockAddAuthor).toHaveBeenCalledWith(mockFormData)
-        expect(mockSetFormData).toHaveBeenCalledWith({ name: '', country: '' })
+        await waitFor(() => {
+            expect(mockAddAuthor).toHaveBeenCalledWith(mockFormData)
+
+            expect(mockSetFormData).toHaveBeenCalledWith({ name: '', country: '' })
+        })
     })
 })
