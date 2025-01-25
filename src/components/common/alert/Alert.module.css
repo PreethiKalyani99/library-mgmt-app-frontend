@@ -1,0 +1,40 @@
+.alert_container{
+    display: flex;
+    align-items: center;
+    padding : 10px 7px;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999 !important;
+}
+
+.icon{
+    width: 30px;
+    height: 30px;
+    margin-right: 15px;
+}
+
+.close_btn{
+    border: none;
+    outline: none;
+    background: transparent;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.message_container{
+    display: flex;
+    align-items: center;
+}
+
+@media (min-width: 951px) { /* Large screen */
+    .alert_container{
+        width: auto;
+    } 
+}
+
+@media (max-width: 950px) { /* small screen */
+    .alert_container{
+        width: 90%;
+    }
+}

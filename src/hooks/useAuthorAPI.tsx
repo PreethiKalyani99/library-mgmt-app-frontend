@@ -35,6 +35,7 @@ export const AuthorDataProvider = ({children}: ProviderProp) => {
             
         } catch (error) {
             console.log(`Error adding author: ${error}`)
+            throw error
         }
     }
 
