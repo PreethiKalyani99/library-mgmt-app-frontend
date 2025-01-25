@@ -6,9 +6,10 @@ interface AuthorFormProps {
     formData:  FormData
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     onSubmit: (e: React.FormEvent) => void
+    isLoading: boolean
 }
 
-const AuthorForm: React.FC<AuthorFormProps>  = ({ formData, onChange, onSubmit }) => {
+const AuthorForm: React.FC<AuthorFormProps>  = ({ formData, onChange, onSubmit, isLoading }) => {
     return (
         <Form onSubmit={onSubmit}>
             <FormGroup className="mb-3">
@@ -34,6 +35,7 @@ const AuthorForm: React.FC<AuthorFormProps>  = ({ formData, onChange, onSubmit }
             <Button
                 type="submit"
                 variant="primary"
+                disabled={isLoading}
             >
                 Submit
             </Button>
