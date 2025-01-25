@@ -1,15 +1,17 @@
 {
   "files": {
-    "main.css": "/library-mgmt-app-frontend/static/css/main.545a97ae.css",
-    "main.js": "/library-mgmt-app-frontend/static/js/main.295bb9e8.js",
+    "main.css": "/library-mgmt-app-frontend/static/css/main.7d189bc9.css",
+    "main.js": "/library-mgmt-app-frontend/static/js/main.00d5f00e.js",
     "static/js/453.baaf4834.chunk.js": "/library-mgmt-app-frontend/static/js/453.baaf4834.chunk.js",
+    "static/media/success.png": "/library-mgmt-app-frontend/static/media/success.3681c0e66d788244dcff.png",
+    "static/media/error.png": "/library-mgmt-app-frontend/static/media/error.fd9b3ba09d0981d69dc9.png",
     "index.html": "/library-mgmt-app-frontend/index.html",
-    "main.545a97ae.css.map": "/library-mgmt-app-frontend/static/css/main.545a97ae.css.map",
-    "main.295bb9e8.js.map": "/library-mgmt-app-frontend/static/js/main.295bb9e8.js.map",
+    "main.7d189bc9.css.map": "/library-mgmt-app-frontend/static/css/main.7d189bc9.css.map",
+    "main.00d5f00e.js.map": "/library-mgmt-app-frontend/static/js/main.00d5f00e.js.map",
     "453.baaf4834.chunk.js.map": "/library-mgmt-app-frontend/static/js/453.baaf4834.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.545a97ae.css",
-    "static/js/main.295bb9e8.js"
+    "static/css/main.7d189bc9.css",
+    "static/js/main.00d5f00e.js"
   ]
 }
