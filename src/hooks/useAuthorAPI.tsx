@@ -1,24 +1,12 @@
-import { useState, useMemo, createContext, useContext } from "react"; 
-import { ProviderProp, FormData } from "../types";
+import { AuthorForm } from "../types";
 import { useAuthToken } from "./useAuthToken";
+import { useAuthor } from "./useAuthor";
 
-interface AuthorDataContextProps {
-    authorData: FormData[]
-    setAuthorData: (authorData: FormData[]) => void
-    addAuthor: (newAuthor: FormData) => void
-}
-
-export const AuthorDataContext = createContext<AuthorDataContextProps>({
-    authorData: [],
-    setAuthorData: () => null,
-    addAuthor: () => null
-})
-
-export const AuthorDataProvider = ({children}: ProviderProp) => {
-    const [authorData, setAuthorData] = useState<FormData[]>([])
+export const useAuthorAPI = () => {
+    const { setAuthorData } = useAuthor()
     const { token } = useAuthToken()
 
-    const addAuthor = async (newAuthor: FormData) => {
+    const addAuthor = async (newAuthor: AuthorForm) => {
         try {
             const response = await fetch("https://library-mgmt-us4m.onrender.com/authors", {
                 method: "POST",
@@ -34,24 +22,14 @@ export const AuthorDataProvider = ({children}: ProviderProp) => {
 
             const result = await response.json()
             setAuthorData((prevData) => [...prevData, result.data])
-            
+
         } catch (error) {
             console.log(`Error adding author: ${error}`)
             throw error
         }
     }
 
-    const value = useMemo(() => {
-        return{
-           authorData,
-           setAuthorData,
-           addAuthor
-        }
-    }, [
-        authorData
-    ])
-
-    return <AuthorDataContext.Provider value={value}>{children}</AuthorDataContext.Provider>
+    return {
+        addAuthor
+    }
 }
-
-export const useAuthorAPI = () => useContext(AuthorDataContext)

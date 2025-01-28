@@ -1,9 +1,11 @@
 import { useState, useMemo, useEffect, createContext, useContext } from "react"; 
-import { ProviderProp, FormData } from "../types";
+import { ProviderProp, AuthorForm } from "../types";
 
 interface AuthorContextProps {
-    formData:  FormData
-    setFormData: (formData: FormData) => void
+    formData:  AuthorForm
+    setFormData: (formData: AuthorForm) => void
+    authorData: AuthorForm[]
+    setAuthorData: (value: React.SetStateAction<AuthorForm[]>) => void
     isAlertVisible: boolean
     setIsAlertVisible: (visible: boolean) => void
 }
@@ -13,11 +15,14 @@ export const AuthorContext = createContext<AuthorContextProps>({
     setFormData: () => null,
     isAlertVisible: false,
     setIsAlertVisible: () => null,
+    authorData: [],
+    setAuthorData: () => {},
 })
 
 export const AuthorProvider = ({children}: ProviderProp) => {
     const [isAlertVisible, setIsAlertVisible] = useState(false)
-    const [formData, setFormData] = useState<FormData>({
+    const [authorData, setAuthorData] = useState<AuthorForm[]>([])
+    const [formData, setFormData] = useState<AuthorForm>({
         name: '',
         country: ''
     })
@@ -35,9 +40,12 @@ export const AuthorProvider = ({children}: ProviderProp) => {
            setFormData,
            isAlertVisible,
            setIsAlertVisible,
+           authorData,
+           setAuthorData,
         }
     }, [
         formData,
+        authorData,
         isAlertVisible,
     ])
 
