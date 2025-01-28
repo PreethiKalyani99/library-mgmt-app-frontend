@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, CardTitle, CardBody } from 'react-bootstrap';
-import AuthorForm from "./AuthorForm";
+import { CustomForm } from '../common/form/Form';
+import { authorFields } from '../../constants/formFields';
 import { Alert } from '../common/alert/Alert';
 import { Loader } from '../common/loader/Loader';
 import { useAuthor } from '../../hooks/useAuthor';
@@ -19,7 +20,11 @@ const Author: React.FC = () => {
         isAlertVisible, 
         setIsAlertVisible,
     } = useAuthor()
+
     const { addAuthor } = useAuthorAPI()
+
+    const formFields = authorFields({ formData: formData })
+    
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -55,11 +60,12 @@ const Author: React.FC = () => {
                 <Card className={styles.card_container}>
                     <CardTitle>Author's Info</CardTitle>
                     <CardBody>
-                        <AuthorForm 
-                            formData={formData}
+                        <CustomForm 
+                            fields={formFields}
                             onChange={handleInputChange}
                             onSubmit={handleSubmit}
                             isLoading={isLoading}
+                            buttonText='Create Author'
                         />
                     </CardBody>
                 </Card>

@@ -12,17 +12,18 @@
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); 
 }
 
-.form_label{
-    font-weight: 500;
+@media (min-width: 850px) { /* Large screen */
+    .card_container{
+        width: 30%;
+    }
 }
 
-@media (min-width: 800px) { /* Large screen */
+@media (min-width: 700px) and (max-width: 849px){
     .card_container{
         width: 50%;
     }
 }
-
-@media (max-width: 799px) { /* small screen */
+@media (max-width: 699px) { /* small screen */
     .card_container{
         width: 100%;
     }
