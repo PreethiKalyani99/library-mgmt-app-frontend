@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -14,7 +15,15 @@ root.render(
   <React.StrictMode>
     <AuthorDataProvider>
       <AuthorProvider>
-        <App />
+        <Router
+          basename="/library-mgmt-app-frontend"
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+          }}
+        >
+          <App />
+        </Router>
       </AuthorProvider>
     </AuthorDataProvider>
   </React.StrictMode>
