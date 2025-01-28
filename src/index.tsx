@@ -6,6 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthorDataProvider } from './hooks/useAuthorAPI';
 import { AuthorProvider } from './hooks/useAuthor';
+import { TokenProvider } from './hooks/useAuthToken';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(
@@ -13,19 +14,21 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <AuthorDataProvider>
-      <AuthorProvider>
-        <Router
-          basename="/library-mgmt-app-frontend"
-          future={{
-            v7_startTransition: true,
-            v7_relativeSplatPath: true,
-          }}
-        >
-          <App />
-        </Router>
-      </AuthorProvider>
-    </AuthorDataProvider>
+    <TokenProvider>
+      <AuthorDataProvider>
+        <AuthorProvider>
+          <Router
+            basename="/library-mgmt-app-frontend"
+            future={{
+              v7_startTransition: true,
+              v7_relativeSplatPath: true,
+            }}
+          >
+            <App />
+          </Router>
+        </AuthorProvider>
+      </AuthorDataProvider>
+    </TokenProvider>
   </React.StrictMode>
 );
 
