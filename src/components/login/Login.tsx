@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardTitle, CardBody } from 'react-bootstrap';
+import { useAuthToken } from '../../hooks/useAuthToken';
 import { CustomForm } from '../common/form/Form';
 import { commonFields } from '../../constants/formFields';
 import styles from './Login.module.css'
@@ -19,6 +20,7 @@ const Login: React.FC = () => {
         email: '',
         password: ''
     })
+    const { setToken } = useAuthToken()
 
     const formFields = commonFields(formData, errors)
 
@@ -38,8 +40,8 @@ const Login: React.FC = () => {
                 throw new Error(`Failed to login, status: ${response.status}`)
             }
 
-            await response.json()
-            localStorage.setItem("isLoggedIn", "true")
+            const result = await response.json()
+            setToken(result.token)
 
         } catch (error) {
             console.log(`Error login user: ${error}`)

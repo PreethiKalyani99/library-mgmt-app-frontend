@@ -1,5 +1,6 @@
 import { useState, useMemo, createContext, useContext } from "react"; 
 import { ProviderProp, FormData } from "../types";
+import { useAuthToken } from "./useAuthToken";
 
 interface AuthorDataContextProps {
     authorData: FormData[]
@@ -15,13 +16,14 @@ export const AuthorDataContext = createContext<AuthorDataContextProps>({
 
 export const AuthorDataProvider = ({children}: ProviderProp) => {
     const [authorData, setAuthorData] = useState<FormData[]>([])
+    const { token } = useAuthToken()
 
     const addAuthor = async (newAuthor: FormData) => {
         try {
             const response = await fetch("https://library-mgmt-us4m.onrender.com/authors", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "authorization": token
                 },
                 body: JSON.stringify(newAuthor)
             })
