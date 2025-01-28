@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { Card, CardTitle, CardBody } from 'react-bootstrap';
 import { isEmailValid, isPasswordValid } from '../../utils/validation';
 import { CustomForm } from '../common/form/Form';
+import { Layout } from '../common/layout/Layout';
 import { commonFields } from '../../constants/formFields';
-import styles from './Signup.module.css'
-
 interface CreateUserProp {
     email: string
     password: string
@@ -17,7 +15,7 @@ const Signup: React.FC = () => {
     })
     const [errors, setErrors] = useState({
         email: '',
-        password:''
+        password: ''
     })
     const formFields = commonFields(formData, errors)
 
@@ -52,8 +50,8 @@ const Signup: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setErrors({email: '', password: ''})
-        
+        setErrors({ email: '', password: '' })
+
         const error: { email?: string; password?: string } = {}
 
         if (!isEmailValid(formData.email)) {
@@ -62,7 +60,7 @@ const Signup: React.FC = () => {
         if (!isPasswordValid(formData.password)) {
             error.password = 'Password should be at least 8 characters long'
         }
-        
+
         if (Object.keys(error).length > 0) {
             setErrors(prev => ({ ...prev, ...error }))
             return
@@ -70,27 +68,27 @@ const Signup: React.FC = () => {
 
         try {
             await CreateUser(formData)
-            setFormData({email: '', password: ''})
-            setErrors({email: '', password: ''})
+            setFormData({ email: '', password: '' })
+            setErrors({ email: '', password: '' })
         } catch (error) {
             console.log(error)
-        } 
+        }
     }
-    
+
     return (
-        <div className={styles.card_wrapper}>
-        <Card className={styles.card_container}>
-            <CardTitle>Signup</CardTitle>
-            <CardBody>
-                <CustomForm
-                    fields={formFields}
-                    onChange={handleInputChange}
-                    onSubmit={handleSubmit}
-                    buttonText='Signup'
-                />
-            </CardBody>
-        </Card>
-    </div>
+        <>
+            <Layout
+                title='Signup'
+                body={
+                    <CustomForm
+                        fields={formFields}
+                        onChange={handleInputChange}
+                        onSubmit={handleSubmit}
+                        buttonText='Signup'
+                    />
+                }
+            />
+        </>
     )
 }
 

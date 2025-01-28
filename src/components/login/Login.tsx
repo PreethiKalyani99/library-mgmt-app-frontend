@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardTitle, CardBody } from 'react-bootstrap';
 import { useAuthToken } from '../../hooks/useAuthToken';
 import { CustomForm } from '../common/form/Form';
+import { Layout } from '../common/layout/Layout';
 import { commonFields } from '../../constants/formFields';
-import styles from './Login.module.css'
-
 interface LoginUser {
     email: string
     password: string
@@ -61,14 +59,14 @@ const Login: React.FC = () => {
         console.log("in submit")
         e.preventDefault()
 
-        setErrors({email: '', password: ''})
-        
+        setErrors({ email: '', password: '' })
+
         const error: { email?: string; password?: string } = {}
 
-        if(formData.email === ''){
+        if (formData.email === '') {
             error.email = "Email is required"
         }
-        if(formData.password === ''){
+        if (formData.password === '') {
             error.password = "Password is required"
         }
 
@@ -78,27 +76,25 @@ const Login: React.FC = () => {
         }
         try {
             await loginUser(formData)
-            setFormData({email: '', password: ''})
+            setFormData({ email: '', password: '' })
             navigate('/author-form')
         } catch (error) {
             console.log(error)
-        } 
+        }
     }
     return (
         <>
-            <div className={styles.card_wrapper}>
-                <Card className={styles.card_container}>
-                    <CardTitle>Login</CardTitle>
-                    <CardBody>
-                        <CustomForm
-                            fields={formFields}
-                            onChange={handleInputChange}
-                            onSubmit={handleSubmit}
-                            buttonText='Login'
-                        />
-                    </CardBody>
-                </Card>
-            </div>
+            <Layout
+                title="Login"
+                body={
+                    <CustomForm
+                        fields={formFields}
+                        onChange={handleInputChange}
+                        onSubmit={handleSubmit}
+                        buttonText='Login'
+                    />
+                }
+            />
         </>
     )
 }
