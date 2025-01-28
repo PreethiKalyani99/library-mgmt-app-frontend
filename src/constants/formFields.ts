@@ -1,3 +1,5 @@
+import { BookForm } from "../types"
+
 interface Data {
     email: string
     password: string
@@ -49,4 +51,39 @@ export const authorFields = ({ formData, errors }: authorFieldProps) => [
         error: errors?.country
     }
 ]
+interface BookFormErrors {
+    authorName: string
+    title: string
+    publishedYear?: string
+}
+interface BookFieldProps {
+    formData: BookForm
+    errors?: BookFormErrors
+}
 
+export const bookFields = ({ formData, errors }: BookFieldProps) => [
+    {
+        label: 'Author Name',
+        name: 'authorName',
+        type: 'text',
+        placeholder: 'Enter author name...',
+        value: formData.authorName,
+        error: errors?.authorName
+    },
+    {
+        label: 'Title',
+        name: 'title',
+        type: 'text',
+        placeholder: 'Enter title...',
+        value: formData.title,
+        error: errors?.title
+    },
+    {
+        label: 'Title',
+        name: 'publishedYear',
+        type: 'text',
+        placeholder: 'Enter Title...',
+        value: formData.publishedYear || ''
+    }
+
+]
