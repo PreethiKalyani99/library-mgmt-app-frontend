@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { isEmailValid, isPasswordValid } from '../../utils/validation';
 import { CustomForm } from '../common/form/Form';
-import { Layout } from '../common/layout/Layout';
+import { ModalLayout } from '../common/modal/Modal';
 import { commonFields } from '../../constants/formFields';
 interface CreateUserProp {
     email: string
@@ -77,7 +77,7 @@ const Signup: React.FC = () => {
 
     return (
         <>
-            <Layout
+            <ModalLayout
                 title='Signup'
                 body={
                     <CustomForm

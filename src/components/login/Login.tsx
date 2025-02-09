@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthToken } from '../../hooks/useAuthToken';
+import { useAuth } from '../../hooks/useAuth';
 import { CustomForm } from '../common/form/Form';
-import { Layout } from '../common/layout/Layout';
+import { ModalLayout } from '../common/modal/Modal';
 import { commonFields } from '../../constants/formFields';
+
 interface LoginUser {
     email: string
     password: string
 }
 
 const Login: React.FC = () => {
+    const [isLoading, setIsLoading] = useState(false)
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -18,7 +20,7 @@ const Login: React.FC = () => {
         email: '',
         password: ''
     })
-    const { setToken } = useAuthToken()
+    const { setToken } = useAuth()
 
     const formFields = commonFields(formData, errors)
 
@@ -40,6 +42,7 @@ const Login: React.FC = () => {
 
             const result = await response.json()
             setToken(result.token)
+            localStorage.setItem("token", result.token)
 
         } catch (error) {
             console.log(`Error login user: ${error}`)
@@ -56,8 +59,8 @@ const Login: React.FC = () => {
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
-        console.log("in submit")
         e.preventDefault()
+        setIsLoading(true)
 
         setErrors({ email: '', password: '' })
 
@@ -77,14 +80,20 @@ const Login: React.FC = () => {
         try {
             await loginUser(formData)
             setFormData({ email: '', password: '' })
-            navigate('/author-form')
+            setIsLoading(false)
+            navigate('/home')
         } catch (error) {
             console.log(error)
+            setIsLoading(false)
+        }
+        finally{
+             setIsLoading(false)
         }
     }
+    
     return (
         <>
-            <Layout
+            <ModalLayout
                 title="Login"
                 body={
                     <CustomForm
@@ -92,6 +101,7 @@ const Login: React.FC = () => {
                         onChange={handleInputChange}
                         onSubmit={handleSubmit}
                         buttonText='Login'
+                        isLoading={isLoading}
                     />
                 }
             />
