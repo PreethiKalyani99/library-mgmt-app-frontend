@@ -1,4 +1,4 @@
-import { BookForm } from "../types"
+import { BookForm, AuthorForm, Field } from "../types"
 
 interface Data {
     email: string
@@ -20,34 +20,30 @@ export const commonFields = (formData: Data, errors: Data) => [
         type: 'password',
         placeholder: 'Enter password...',
         value: formData.password,
-        error: errors.password
+        error: errors.password 
     }
 ]
 
-interface AuthorData {
-    name: string
-    country: string
-}
 interface authorFieldProps {
-    formData: AuthorData
-    errors?: AuthorData
+    formData: AuthorForm
+    errors?: AuthorForm
 }
 
 export const authorFields = ({ formData, errors }: authorFieldProps) => [
     {
-        label: 'Email',
-        name: 'email',
-        type: 'email',
-        placeholder: 'Enter email...',
+        label: 'Name',
+        name: 'name',
+        type: 'text',
+        placeholder: 'Enter Name...',
         value: formData.name,
         error: errors?.name
     },
     {
-        label: 'Password',
-        name: 'password',
-        type: 'password',
-        placeholder: 'Enter password...',
-        value: formData.country,
+        label: 'Country',
+        name: 'country',
+        type: 'text',
+        placeholder: 'Enter country...',
+        value: formData?.country || '',
         error: errors?.country
     }
 ]
@@ -59,16 +55,17 @@ interface BookFormErrors {
 interface BookFieldProps {
     formData: BookForm
     errors?: BookFormErrors
+    options?: string[]
 }
 
-export const bookFields = ({ formData, errors }: BookFieldProps) => [
+export const bookFields = ({ formData, errors, options }: BookFieldProps): Field[] => [
     {
+        autocomplete: true,
         label: 'Author Name',
         name: 'authorName',
-        type: 'text',
-        placeholder: 'Enter author name...',
-        value: formData.authorName,
-        error: errors?.authorName
+        placeholder: 'Search author name...',
+        error: errors?.authorName,
+        option: options
     },
     {
         label: 'Title',
@@ -79,11 +76,10 @@ export const bookFields = ({ formData, errors }: BookFieldProps) => [
         error: errors?.title
     },
     {
-        label: 'Title',
+        label: 'Published Year',
         name: 'publishedYear',
         type: 'text',
         placeholder: 'Enter Title...',
         value: formData.publishedYear || ''
-    }
-
+    } 
 ]
