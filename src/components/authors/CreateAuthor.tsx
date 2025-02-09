@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { authorFields } from '../../constants/formFields';
 import { CustomForm } from '../common/form/Form';
-import { Layout } from '../common/layout/Layout';
+import { ModalLayout } from '../common/modal/Modal';
 import { Alert } from '../common/alert/Alert';
 import { Loader } from '../common/loader/Loader';
 import { useAuthor } from '../../hooks/useAuthor';
 import { useAuthorAPI } from '../../hooks/useAuthorAPI';
+import { AuthorForm } from '../../types';
 
 const CreateAuthor: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -13,6 +14,7 @@ const CreateAuthor: React.FC = () => {
         type: 'success',
         message: 'Author created successfully'
     })
+
     const {
         formData,
         setFormData,
@@ -22,12 +24,14 @@ const CreateAuthor: React.FC = () => {
 
     const { addAuthor } = useAuthorAPI()
 
-    const formFields = authorFields({ formData: formData })
-
+    const formFields = authorFields({ formData })
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
-        setFormData({ ...formData, [name]: value })
+        setFormData((prevState: AuthorForm) => ({
+            ...prevState, 
+            [name]: value
+          }))
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -38,7 +42,7 @@ const CreateAuthor: React.FC = () => {
             setFormData({ name: '', country: '' })
             setAlertProps({ type: 'success', message: 'Author created successfully' })
         } catch (error) {
-            setAlertProps({ type: 'error', message: 'Failed to create Author' })
+            setAlertProps({ type: 'error', message: `Error: ${error}` })
         } finally {
             setIsLoading(false)
             setIsAlertVisible(true)
@@ -55,7 +59,8 @@ const CreateAuthor: React.FC = () => {
                     onClose={() => setIsAlertVisible(false)}
                 />
             }
-            <Layout
+            <ModalLayout
+                height={70}
                 title="Author's Info"
                 body={
                     <CustomForm
