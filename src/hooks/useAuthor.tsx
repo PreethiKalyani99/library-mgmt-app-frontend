@@ -8,20 +8,40 @@ interface AuthorContextProps {
     setAuthorData: (value: React.SetStateAction<AuthorForm[]>) => void
     isAlertVisible: boolean
     setIsAlertVisible: (visible: boolean) => void
+    options: string[]
+    setOptions: (value: React.SetStateAction<string[]>) => void
+    count: number
+    setCount: (count: number) => void
+    currentPage: number
+    setCurrentPage: (page: number) => void
+    rowsPerPage: number
+    setRowsPerPage: (page: number) => void
 }
 
-export const AuthorContext = createContext<AuthorContextProps>({
+export const AuthorContext = createContext<AuthorContextProps>({ 
     formData: {name: '', country: ''} ,
-    setFormData: () => null,
+    setFormData: () => {},
     isAlertVisible: false,
     setIsAlertVisible: () => null,
     authorData: [],
     setAuthorData: () => {},
+    options: [],
+    setOptions: () => null,
+    count: 0,
+    setCount: () => null,
+    currentPage: 1,
+    setCurrentPage: () => null,
+    rowsPerPage: 10,
+    setRowsPerPage: () => null,
 })
 
 export const AuthorProvider = ({children}: ProviderProp) => {
     const [isAlertVisible, setIsAlertVisible] = useState(false)
     const [authorData, setAuthorData] = useState<AuthorForm[]>([])
+    const [count, setCount] = useState(0)
+    const [currentPage, setCurrentPage] = useState(1)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [options, setOptions] = useState<string[]>([])
     const [formData, setFormData] = useState<AuthorForm>({
         name: '',
         country: ''
@@ -42,11 +62,23 @@ export const AuthorProvider = ({children}: ProviderProp) => {
            setIsAlertVisible,
            authorData,
            setAuthorData,
+           options,
+           setOptions,
+           count,
+           setCount,
+           currentPage,
+           setCurrentPage,
+           rowsPerPage,
+           setRowsPerPage
         }
     }, [
         formData,
         authorData,
         isAlertVisible,
+        options,
+        count, 
+        currentPage,
+        rowsPerPage
     ])
 
     return <AuthorContext.Provider value={value}>{children}</AuthorContext.Provider>
