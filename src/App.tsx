@@ -1,12 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
 import { roles } from './constants/roles';
 import PrivateRoute from './routes/PrivateRoutes';
-import CreateAuthor from './components/authors/CreateAuthor';
-import CreateBook from './components/books/CreateBook';
 import Login from './components/login/Login';
 import Signup from './components/signup/Signup';
-import Sidebar from './components/common/sidebar/Sidebar';
+import Main from './components/Main';
 import Authors from './components/authors/Authors';
+import Books from './components/books/Books';
 import './App.css';
 
 function App() {
@@ -15,7 +14,7 @@ function App() {
       <Route path='/' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/>
 
-      <Route path='/home' element={<PrivateRoute component={<Sidebar />} />} >
+      <Route path='/home' element={<PrivateRoute component={<Main />} />} >
         <Route
           path='authors'
           element={
@@ -26,11 +25,11 @@ function App() {
           }
         />
         <Route 
-          path='book-form' 
+          path='books' 
           element={
             <PrivateRoute 
-              component={<CreateBook />} 
-              allowedRoles={[roles.ADMIN, roles.LIBRARIAN]}
+              component={<Books />} 
+              allowedRoles={[roles.ADMIN, roles.LIBRARIAN, roles.READER, roles.RECEPTIONIST]}
             />
           } 
         />  
