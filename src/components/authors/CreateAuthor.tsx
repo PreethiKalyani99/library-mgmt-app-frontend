@@ -8,7 +8,11 @@ import { useAuthor } from '../../hooks/useAuthor';
 import { useAuthorAPI } from '../../hooks/useAuthorAPI';
 import { AuthorForm } from '../../types';
 
-const CreateAuthor: React.FC = () => {
+interface CreateAuthorProp {
+    setShowModal: (value: boolean) => void
+}
+
+const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [alertProps, setAlertProps] = useState({
         type: 'success',
@@ -39,6 +43,7 @@ const CreateAuthor: React.FC = () => {
         try {
             setIsLoading(true)
             await addAuthor(formData)
+            setShowModal(false)
             setFormData({ name: '', country: '' })
             setAlertProps({ type: 'success', message: 'Author created successfully' })
         } catch (error) {
