@@ -16,6 +16,8 @@ interface AuthorContextProps {
     setCurrentPage: (page: number) => void
     rowsPerPage: number
     setRowsPerPage: (page: number) => void
+    query: string
+    setQuery: (str: string) => void
 }
 
 export const AuthorContext = createContext<AuthorContextProps>({ 
@@ -33,6 +35,8 @@ export const AuthorContext = createContext<AuthorContextProps>({
     setCurrentPage: () => null,
     rowsPerPage: 10,
     setRowsPerPage: () => null,
+    query: '',
+    setQuery: () => null,
 })
 
 export const AuthorProvider = ({children}: ProviderProp) => {
@@ -42,6 +46,7 @@ export const AuthorProvider = ({children}: ProviderProp) => {
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [options, setOptions] = useState<string[]>([])
+    const [query, setQuery] = useState('')
     const [formData, setFormData] = useState<AuthorForm>({
         name: '',
         country: ''
@@ -69,7 +74,9 @@ export const AuthorProvider = ({children}: ProviderProp) => {
            currentPage,
            setCurrentPage,
            rowsPerPage,
-           setRowsPerPage
+           setRowsPerPage,
+           query,
+           setQuery,
         }
     }, [
         formData,
@@ -78,7 +85,8 @@ export const AuthorProvider = ({children}: ProviderProp) => {
         options,
         count, 
         currentPage,
-        rowsPerPage
+        rowsPerPage,
+        query,
     ])
 
     return <AuthorContext.Provider value={value}>{children}</AuthorContext.Provider>
