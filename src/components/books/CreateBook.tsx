@@ -10,7 +10,11 @@ import { useAuthor } from '../../hooks/useAuthor';
 import { useBookAPI } from '../../hooks/useBookAPI';
 import { useAuthorAPI } from '../../hooks/useAuthorAPI';
 
-const CreateBook: React.FC = () => {
+interface CreateBookProp {
+    setShowModal: (value: boolean) => void
+}
+
+const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [alertProps, setAlertProps] = useState({
         type: 'success',
@@ -36,6 +40,10 @@ const CreateBook: React.FC = () => {
         }
     }
 
+    const handleOptionChange = (selected: any) => {
+        setFormData({...formData, authorName: selected[0] || ''})
+    }
+
     const debouncedSave = useCallback(
         debounce(async (newValue: string) => {
             const result = await getAuthor({ search: newValue })
@@ -57,12 +65,13 @@ const CreateBook: React.FC = () => {
             title: formData.title,
             published_year: formData.publishedYear || '',
             author: {
-                id: formData.authorName
+                name: formData.authorName
             }
         }
         try {
             setIsLoading(true)
             await addBook(newBook)
+            setShowModal(false)
             setFormData({ authorName: '', title: '', publishedYear: '' })
             setAlertProps({ type: 'success', message: 'Book created successfully' })
         }
@@ -94,6 +103,7 @@ const CreateBook: React.FC = () => {
                         onSubmit={handleSubmit}
                         buttonText='Create Book'
                         onSearch={handleSearch}
+                        onOptionChange={handleOptionChange}
                     />
                 }
             />
