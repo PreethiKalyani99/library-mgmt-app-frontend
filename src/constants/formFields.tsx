@@ -47,14 +47,15 @@ export const authorFields = ({ formData, errors }: authorFieldProps) => [
         error: errors?.country
     }
 ]
-interface BookFormErrors {
+
+interface FormProp {
     authorName: string
     title: string
     publishedYear?: string
 }
 interface BookFieldProps {
-    formData: BookForm
-    errors?: BookFormErrors
+    formData: FormProp
+    errors?: FormProp
     options?: string[]
 }
 
@@ -65,7 +66,8 @@ export const bookFields = ({ formData, errors, options }: BookFieldProps): Field
         name: 'authorName',
         placeholder: 'Search author name...',
         error: errors?.authorName,
-        option: options
+        option: options,
+        value: formData.authorName
     },
     {
         label: 'Title',

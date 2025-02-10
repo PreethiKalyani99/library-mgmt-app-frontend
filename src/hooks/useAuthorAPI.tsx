@@ -1,5 +1,6 @@
 import { AuthorForm } from "../types";
 import { useAuthor } from "./useAuthor";
+import { GetApiProp } from "../types";
 
 export const useAuthorAPI = () => {
     const { setAuthorData, setCount } = useAuthor()
@@ -21,24 +22,13 @@ export const useAuthorAPI = () => {
             }
 
             const result = await response.json()
-            setAuthorData(prev => ({
-                ...prev,
-                ...result.data
-            }))
-
         } catch (error) {
             console.log(`Error adding author: ${error}`)
             throw error
         }
     }
 
-    interface GetAuthorProp {
-        search?: string
-        pageNumber?: number
-        pageSize?: number
-    }
-
-    const getAuthor = async ({ search, pageNumber = 1, pageSize = 10}: GetAuthorProp) => {
+    const getAuthor = async ({ search, pageNumber = 1, pageSize = 10}: GetApiProp) => {
         try {
             const response = await fetch(`https://library-mgmt-us4m.onrender.com/authors?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}`: ''}`, {
                 method: "GET",
