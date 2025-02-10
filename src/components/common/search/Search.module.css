@@ -1,0 +1,21 @@
+.search_container{
+    display: flex;
+    border: 1px solid black;
+    width: 70%;
+}
+
+.input_box {
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.input_box, .search_btn{
+    border: none;
+    outline: none;
+}
+
+.search_btn{
+    padding: 10px;
+    background-color: #333;
+    color: white;
+}
