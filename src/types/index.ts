@@ -10,10 +10,17 @@ export type AuthorForm = {
     country?: string
 }
 
+export type UserForm = {
+    user_id: number
+    email: string
+}
+
 export type BookForm = {
-    authorName: string
+    book_id: number
     title: string
-    publishedYear?: string
+    published_year?: number
+    author: AuthorForm
+    users: UserForm
 }
 
 export type Field = {
@@ -27,4 +34,10 @@ export type Field = {
     as?: string
     children?: ReactNode
     option?: string[]
+}
+
+export type GetApiProp = {
+    search?: string
+    pageNumber?: number
+    pageSize?: number
 }
