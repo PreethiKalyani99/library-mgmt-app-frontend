@@ -1,0 +1,23 @@
+.header_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+}
+
+@media (min-width: 800px) { /* Large screen */
+    .menu_btn{
+        display: none;
+    }
+}
+
+@media (max-width: 799px) { /* Small screen */
+    .menu_btn{
+        float: right;
+        border: none;
+        outline: none;
+    }
+}
