@@ -4,24 +4,19 @@
 
 .sidebar_item {
     font-size: 1.5rem;
-    padding: 15px 20px;
+    padding: 20px;
+    text-align: center
 }
 
 .sidebar_item:hover {
-    background-color: #007bff;
+    background-color: #333;
     color: white;
     cursor: pointer;
 }
 
 @media (min-width: 800px) { /* Large screen */
-    .wrapper {
-        display: flex;
-    }
-    
     .sidebar_container {
-        height: 100vh;
-        min-width: 15%;
-        width: auto;
+        height: 100vh; 
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         padding-top: 30px;
     }
@@ -33,10 +28,9 @@
 
 @media (max-width: 799px) { /* Small screen */
     .sidebar_container_mob{
-        display: inline-block;
         position: absolute;
-        top: 40px;
-        right: 0;
+        right: 12px;
+        padding: 10px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         background-color: white;
     }
