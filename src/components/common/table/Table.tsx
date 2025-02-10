@@ -75,7 +75,7 @@ const TableBody = ({ rowData, columnData, role }: TableBodyProp) => {
         return (
             <tbody>
                 <tr>
-                    <td colSpan={5} className={styles.empty_table}>No such data</td>
+                    <td className={styles.empty_table}>No such data</td>
                 </tr>
             </tbody>
         )

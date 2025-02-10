@@ -1,5 +1,4 @@
 .empty_table {
-    text-align: center;
     padding: 1rem;
 }
 
@@ -62,8 +61,8 @@ table {
     border-collapse: collapse;
     margin: 0 auto;
     border-spacing: 0;
-    border-bottom: 1px solid black;
     text-align: left;
+    border: 1px solid black;
     table-layout: fixed;
 }
 
@@ -94,10 +93,6 @@ tr:hover {
 }
 
 @media (max-width: 799px){ /* small screen */
-  table{
-    width: 100%;
-  }
-
   .pagination-container{
     align-items: center;
     width: 100%; 
