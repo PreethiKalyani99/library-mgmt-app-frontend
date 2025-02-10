@@ -1,9 +1,9 @@
 import { useBook } from "./useBook";
-import { useAuth } from "./useAuth";
+import { GetApiProp } from "../types";
 
 interface AuthorProp {
-    id: string
-    name?: string
+    id?: string
+    name: string
     country?: string
 }
 interface AddBookProp {
@@ -13,8 +13,8 @@ interface AddBookProp {
 }
 
 export const useBookAPI = () => {
-    const { setBookData } = useBook()
-    const { token } = useAuth()
+    const { setBookData, setCount } = useBook()
+    const token = localStorage.getItem("token") || ''
 
     const addBook = async (newBook: AddBookProp) => {
         try {
@@ -32,7 +32,6 @@ export const useBookAPI = () => {
             }
 
             const result = await response.json()
-            setBookData((prevData) => [...prevData, result.data])
 
         } catch (error) {
             console.log(`Error adding book: ${error}`)
@@ -40,7 +39,33 @@ export const useBookAPI = () => {
         }
     }
 
+    const getBook = async ({ search, pageNumber = 1, pageSize = 10}: GetApiProp) => {
+        try {
+            const response = await fetch(`https://library-mgmt-us4m.onrender.com/books?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}`: ''}`, {
+                method: "GET",
+                headers: {
+                    "authorization": token || '',
+                    "Content-Type": "application/json"
+                }
+            })
+
+            if (!response.ok) {
+                throw new Error(`Failed to get books, status: ${response.status}`)
+            }
+
+            const result = await response.json()
+            setBookData(result.data)
+            setCount(Number(result.totalCount))
+            return result
+
+        } catch (error) {
+            console.log(`Error getting books: ${error}`)
+            throw error
+        }
+    }
+
     return {
-        addBook
+        addBook,
+        getBook
     }
 }
