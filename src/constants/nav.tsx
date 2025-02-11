@@ -3,7 +3,7 @@ import { roles } from "./roles"
 export const nav = [
     {
         name: 'User Management',
-        path: '/home/user-management',
+        path: '/home/users',
         roles: [roles.ADMIN],
         tab: 'users',
     },
@@ -22,7 +22,7 @@ export const nav = [
     {
         name: 'Borrowed Books',
         path: '/home/borrowed-books',
-        roles: [roles.ADMIN, roles.LIBRARIAN, roles.RECEPTIONIST],
-        tab: 'borrow',
+        roles: [roles.ADMIN, roles.LIBRARIAN, roles.RECEPTIONIST, roles.READER],
+        tab: 'borrowed-books',
     }
 ]

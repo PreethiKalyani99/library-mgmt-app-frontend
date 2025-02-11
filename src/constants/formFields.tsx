@@ -1,4 +1,4 @@
-import { BookForm, AuthorForm, Field } from "../types"
+import { AuthorForm, Field } from "../types"
 
 interface Data {
     email: string
@@ -57,9 +57,11 @@ interface BookFieldProps {
     formData: FormProp
     errors?: FormProp
     options?: string[]
+    onInputChange?: (option: string) => void,
+    onOptionChange?: (selected: any) => void,
 }
 
-export const bookFields = ({ formData, errors, options }: BookFieldProps): Field[] => [
+export const bookFields = ({ formData, errors, options, onInputChange, onOptionChange }: BookFieldProps): Field[] => [
     {
         autocomplete: true,
         label: 'Author Name',
@@ -67,7 +69,9 @@ export const bookFields = ({ formData, errors, options }: BookFieldProps): Field
         placeholder: 'Search author name...',
         error: errors?.authorName,
         option: options,
-        value: formData.authorName
+        value: formData.authorName,
+        inputChange: onInputChange,
+        onChange: onOptionChange,
     },
     {
         label: 'Title',
@@ -84,4 +88,99 @@ export const bookFields = ({ formData, errors, options }: BookFieldProps): Field
         placeholder: 'Enter Title...',
         value: formData.publishedYear || ''
     } 
+]
+
+interface UserFormProp {
+    email: string
+    password: string
+    role: string
+}
+interface UserFieldProp {
+    formData: UserFormProp
+    errors?: UserFormProp
+}
+
+export const userFields = ({ formData, errors }: UserFieldProp) => [
+    {
+        label: "Email",
+        name: 'email',
+        type: 'email',
+        placeholder: 'Enter Email...',
+        value: formData.email,
+        error: errors?.email,
+    },
+    {
+        label: "Password",
+        name: 'password',
+        type: 'password',
+        placeholder: 'Enter Password...',
+        value: formData.password,
+        error: errors?.password,
+    },
+    {
+        label: "Role",
+        name: 'role',
+        type: 'text',
+        placeholder: 'Enter Role...',
+        value: formData.role,
+        error: errors?.role,
+    },
+]
+
+interface BorrowFormProp {
+    title: string
+    borrower: string
+    borrowDate: string
+    returnDate: string
+}
+interface BorrowFieldProp {
+    formData: BorrowFormProp
+    errors?: BorrowFormProp
+    bookInputChange: (selected: any) => void
+    userInputChange: (selected: any) => void
+    onBookChange: (selected: string) => void
+    onUserChange: (selected: string) => void
+    bookOptions: any
+    userOptions: any
+}
+
+export const borrowFields = ({ formData, errors, bookInputChange, userInputChange, onBookChange, onUserChange, bookOptions, userOptions }: BorrowFieldProp) => [
+    {
+        autocomplete: true,
+        label: "Title",
+        name: 'title',
+        error: errors?.title,
+        placeholder: 'Search title...',
+        value: formData.title,
+        inputChange: bookInputChange,
+        onChange: onBookChange,
+        option: bookOptions
+    },
+    {
+        autocomplete: true,
+        label: "User",
+        name: 'borrower',
+        placeholder: 'Search user...',
+        value: formData.borrower,
+        error: errors?.borrower,
+        inputChange: userInputChange,
+        onChange: onUserChange,
+        option: userOptions
+    },
+    {
+        label: "Borrow Date",
+        name: 'borrowDate',
+        type: 'date',
+        placeholder: 'Borrow Date',
+        value: formData.borrowDate,
+        error: errors?.borrowDate,
+    },
+    {
+        label: "Return Date",
+        name: 'returnDate',
+        type: 'date',
+        placeholder: 'Return Date',
+        value: formData.returnDate,
+        error: errors?.returnDate,
+    },
 ]
