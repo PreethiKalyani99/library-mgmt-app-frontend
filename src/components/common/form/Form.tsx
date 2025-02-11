@@ -39,19 +39,18 @@ interface FormFieldsProps {
     onOptionChange?: (selected: any) => void
 }
 
-const FormFields: React.FC<FormFieldsProps> = ({ fields, onChange, onSearch, onOptionChange }) => {
-    const handleSearch = onSearch || (() => {})
-    const handleOptionChange = onOptionChange || (() => {})
+const FormFields: React.FC<FormFieldsProps> = ({ fields, onChange }) => {
     return (
         <>
             {fields.map(field => (
+                console.log(field, "field props"),
                 <FormGroup className="mb-3" key={field.label}>
                     <FormLabel className={styles.form_label}>{field.label}</FormLabel>
                     {field?.autocomplete ?
                         <Autocomplete
                             field={field}
-                            onChange={handleOptionChange}
-                            onInputChange={handleSearch}
+                            onChange={field.onChange || (() => {})}
+                            onInputChange={field.inputChange || (() => {})}
                         />
                         :
                         <TextFields
