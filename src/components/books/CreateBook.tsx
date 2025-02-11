@@ -25,15 +25,16 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
         formData,
         setFormData,
         isAlertVisible,
-        setIsAlertVisible,
+        setIsAlertVisible, 
     } = useBook()
+    
     const { options, setOptions } = useAuthor()
 
     const { addBook } = useBookAPI()
     const { getAuthor } = useAuthorAPI()
 
     const handleSearch = (option: string) => {
-        setFormData({...formData, authorName: option})
+        setFormData({...formData, authorName: option}) 
         if(option.length >= 3 && /^[a-zA-Z]+$/.test(option)){
             debouncedSave(option)
             return
@@ -52,7 +53,7 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
         }, 1000),
     [])
 
-    const formFields = bookFields({ formData, options })
+    const formFields = bookFields({ formData, options, onOptionChange: handleOptionChange, onInputChange: handleSearch })
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -66,7 +67,7 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
             published_year: formData.publishedYear || '',
             author: {
                 name: formData.authorName
-            }
+            } 
         }
         try {
             setIsLoading(true)
@@ -83,6 +84,7 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
             setIsAlertVisible(true)
         }
     }
+    
     return (
         <>
             {isLoading && <Loader />}
@@ -102,8 +104,6 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
                         onChange={handleInputChange}
                         onSubmit={handleSubmit}
                         buttonText='Create Book'
-                        onSearch={handleSearch}
-                        onOptionChange={handleOptionChange}
                     />
                 }
             />

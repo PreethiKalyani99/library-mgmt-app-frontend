@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"
-import { useData } from "../../hooks/useData";
+import { useUser } from "../../hooks/useUser";
 import { nav } from "../../constants/nav";
 import styles from  './Sidebar.module.css'
 
@@ -52,7 +52,7 @@ export default function Sidebar({ showSidebar }: SidebarProp){
 
 function NavItem({ item }: NavItemProp) {
     const navigate = useNavigate()
-    const { setActiveTab } = useData()
+    const { setActiveTab } = useUser()
 
     const handleClick = (path: string, tabName: string) => {
         setActiveTab(tabName)
