@@ -7,7 +7,8 @@ import reportWebVitals from './reportWebVitals';
 import { AuthorProvider } from './hooks/useAuthor';
 import { BookProvider } from './hooks/useBook';
 import { AuthProvider } from './hooks/useAuth';
-import { DataProvider } from './hooks/useData';
+import { UserProvider } from './hooks/useUser';
+import { BorrowProvider } from './hooks/useBorrow';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(
@@ -23,13 +24,15 @@ root.render(
       }}
     >
       <AuthProvider>
-        <DataProvider>
+        <UserProvider>
           <AuthorProvider>
             <BookProvider>
-              <App />
+              <BorrowProvider>
+                <App />
+              </BorrowProvider>
             </BookProvider>
           </AuthorProvider>
-        </DataProvider>
+        </UserProvider>
       </AuthProvider>
     </Router>
   </React.StrictMode>
