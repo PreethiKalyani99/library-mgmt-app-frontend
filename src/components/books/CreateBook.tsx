@@ -12,9 +12,11 @@ import { useAuthorAPI } from '../../hooks/useAuthorAPI';
 
 interface CreateBookProp {
     setShowModal: (value: boolean) => void
+    isEdit: boolean
+    rowId: number
 }
 
-const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
+const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [alertProps, setAlertProps] = useState({
         type: 'success',
@@ -30,7 +32,7 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
     
     const { options, setOptions } = useAuthor()
 
-    const { addBook } = useBookAPI()
+    const { addBook, updateBook } = useBookAPI()
     const { getAuthor } = useAuthorAPI()
 
     const handleSearch = (option: string) => {
@@ -71,6 +73,17 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
         }
         try {
             setIsLoading(true)
+            if(isEdit){
+                const updateProp = {
+                    id: rowId,
+                    title: formData.title,
+                    published_year: formData.publishedYear || '',
+                    author:{
+                        name: formData.authorName
+                    }
+                }
+                await updateBook(updateProp)
+            }
             await addBook(newBook)
             setShowModal(false)
             setFormData({ authorName: '', title: '', publishedYear: '' })
@@ -104,7 +117,7 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
                         fields={formFields}
                         onChange={handleInputChange}
                         onSubmit={handleSubmit}
-                        buttonText='Create Book'
+                        buttonText={isEdit? 'Edit Book' : 'Create Book'}
                     />
                 }
             />

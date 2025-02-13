@@ -64,8 +64,64 @@ export const useBookAPI = () => {
         }
     }
 
+    interface AuthorProp {
+        id?: number
+        name?: string
+    }
+    interface BookProp {
+        id: number
+        title?: string
+        published_year: string
+        author: AuthorProp
+    }
+
+    const updateBook = async (bookProp: BookProp) => {
+        const { id, ...props } = bookProp
+        try {
+            const response = await fetch(`https://library-mgmt-us4m.onrender.com/books/${id}`, {
+                method: "PUT",
+                headers: {
+                    "authorization": token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ props })
+            })
+
+            if (!response.ok) {
+                throw new Error(`Failed to update book, status: ${response.status}`)
+            }
+            await response.json()
+
+        } catch (error) {
+            console.log(`Error updating book: ${error}`)
+            throw error
+        }
+    }
+
+    const deleteBook = async (id: number) => {
+        try {
+            const response = await fetch(`https://library-mgmt-us4m.onrender.com/books/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "authorization": token,
+                    "Content-Type": "application/json"
+                }
+            })
+
+            if (!response.ok) {
+                throw new Error(`Failed to delete book, status: ${response.status}`)
+            }
+
+        } catch (error) {
+            console.log(`Error deleting book: ${error}`)
+            throw error
+        }
+    }
+
     return {
         addBook,
-        getBook
+        getBook,
+        deleteBook,
+        updateBook,
     }
 }

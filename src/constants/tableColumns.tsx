@@ -37,3 +37,27 @@ export const authorColumns = [
         width: 100
     }
 ]
+
+export const bookColumns = [
+    {
+        id: 1,
+        title: 'Book Title',
+        width: 200
+    },
+    {
+        id: 2,
+        title: 'Author',
+        width: 200
+    },
+    {
+        id: 3,
+        title: 'Published Year',
+        width: 200
+    },
+    {
+        id: 4,
+        title: 'Actions',
+        roles: [roles.ADMIN, roles.LIBRARIAN],
+        width: 100
+    }
+]
