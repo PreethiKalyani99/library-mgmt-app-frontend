@@ -4,8 +4,6 @@ import { Row, Col } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "../hooks/useUser";
 import { useAuth } from "../hooks/useAuth";
-import { useUserAPI } from "../hooks/useUserAPI";
-import { roles } from "../constants/roles";
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import Authors from "./authors/Authors";
@@ -15,7 +13,7 @@ import Borrowers from "./borrowed-books/Borrowers";
 
 interface JwtPayload {
     role: string
-    user_id: number
+    user_id: number 
 }
 
 export default function Main(){
@@ -51,7 +49,6 @@ export default function Main(){
             <Row className="row-container">
                 <Header
                     onClick={handleClick}
-                    showSidebar={showSidebar}
                 />
             </Row>
             <Row className="row-container">
