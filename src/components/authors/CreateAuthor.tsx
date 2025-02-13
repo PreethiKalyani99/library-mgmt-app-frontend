@@ -67,6 +67,7 @@ const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal }) => {
             <ModalLayout
                 height={70}
                 title="Author's Info"
+                close={() => setShowModal(false)}
                 body={
                     <CustomForm
                         fields={formFields}

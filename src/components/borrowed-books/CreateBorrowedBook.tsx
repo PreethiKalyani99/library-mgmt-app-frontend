@@ -104,7 +104,7 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal }) => {
         }
         try {
             setIsLoading(true)
-            await addBorrower(newUser)
+            await addBorrower(newUser) 
             setShowModal(false)
             setFormData({ borrowDate: '', returnDate: '', title: '', borrower: '' })
             setAlertProps({ type: 'success', message: 'Borrower created successfully' })
@@ -131,6 +131,7 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal }) => {
             <ModalLayout
                 height={70}
                 title="Borrower Info"
+                close={() => setShowModal(false)}
                 body={
                     <CustomForm
                         fields={formFields}

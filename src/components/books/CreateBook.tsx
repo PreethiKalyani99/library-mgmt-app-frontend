@@ -98,6 +98,7 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal }) => {
             <ModalLayout
                 height={70}
                 title="Book Info"
+                close={() => setShowModal(false)}
                 body={
                     <CustomForm
                         fields={formFields}
