@@ -17,7 +17,7 @@ export default function Users() {
     const [rowId, setRowId] = useState(0)
 
     const { userData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery } = useUser()
-    const { role } = useAuth()
+    const { role } = useAuth() 
     const { getUser } = useUserAPI()
 
     useEffect(() => {
@@ -114,7 +114,6 @@ export default function Users() {
             {showModal && 
                 <CreateUser 
                     setShowModal={setShowModal}
-                    setIsEdit={setIsEdit}
                     isEdit={isEdit}
                     rowId={rowId}
                 />

@@ -25,8 +25,7 @@ export default function Main(){
     const navigate = useNavigate()
 
     const { activeTab } = useUser()
-    const { getUser } = useUserAPI()
-    const { setRole, role } = useAuth()
+    const { setRole } = useAuth()
 
     const token = localStorage.getItem("token") || ''
 
@@ -40,12 +39,6 @@ export default function Main(){
         } catch (error) {
             console.error("Error decoding token", error)
             navigate("/")
-        }
-    }, [])
-
-    useEffect(() => {
-        if(role === roles.ADMIN){
-            getUser({})
         }
     }, [])
 

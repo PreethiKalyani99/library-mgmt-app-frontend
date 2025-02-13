@@ -10,12 +10,11 @@ import { UserFormProp } from "../../types";
 
 interface CreateUserProp {
     setShowModal: (value: boolean) => void
-    setIsEdit: (value: boolean) => void
     isEdit: boolean
     rowId: number
 }
 
-const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, setIsEdit, isEdit, rowId }) => {
+const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [alertProps, setAlertProps] = useState({
         type: 'success',
