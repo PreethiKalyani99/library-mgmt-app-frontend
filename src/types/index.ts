@@ -10,9 +10,14 @@ export type AuthorForm = {
     country?: string
 }
 
+export type RoleProp = {
+    role: string
+}
+
 export type UserForm = {
-    user_id?: number
+    user_id: number
     email: string
+    role: RoleProp
 }
 
 export type BookData = {
@@ -29,12 +34,17 @@ export type BookForm = {
     users: UserForm
 }
 
+export type UserType = {
+    user_id?: number
+    email: string
+}
+
 export type BorrowFormData = {
     id?: number
     borrow_date: string
     return_date?: string | null
     book: BookData
-    borrower: UserForm
+    borrower: UserType
 }
 
 export type BorrowDataProp = {
@@ -42,11 +52,12 @@ export type BorrowDataProp = {
     borrow_date: string
     return_date?: string | null
     books: BookData
-    users: UserForm
+    users: UserType
 }
 
 export type Field = {
     autocomplete?: boolean
+    disabled?: boolean
     label: string
     name: string
     type?: string

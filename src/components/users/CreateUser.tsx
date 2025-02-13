@@ -10,9 +10,12 @@ import { UserFormProp } from "../../types";
 
 interface CreateUserProp {
     setShowModal: (value: boolean) => void
+    setIsEdit: (value: boolean) => void
+    isEdit: boolean
+    rowId: number
 }
 
-const CreateUser: React.FC<CreateUserProp> = ({ setShowModal }) => {
+const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, setIsEdit, isEdit, rowId }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [alertProps, setAlertProps] = useState({
         type: 'success',
@@ -25,9 +28,9 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal }) => {
         isAlertVisible,
         setIsAlertVisible,
     } = useUser()
-    const { addUser } = useUserAPI()
+    const { addUser, updateUser } = useUserAPI()
 
-    const formFields = userFields({ formData })
+    const formFields = userFields({ formData, isEdit })
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -41,6 +44,14 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal }) => {
         e.preventDefault()
         try {
             setIsLoading(true)
+            if(isEdit){
+                const user = {
+                    role: formData.role,
+                    id: rowId
+                }
+                await updateUser(user)
+                return
+            }
             await addUser(formData)
             setShowModal(false)
             setFormData({ email: '', password: '', role: '' })
@@ -66,13 +77,14 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal }) => {
             <ModalLayout
                 height={70}
                 title="User's Info"
+                close={() => setShowModal(false)}
                 body={
                     <CustomForm
                         fields={formFields}
                         onChange={handleInputChange}
                         onSubmit={handleSubmit}
                         isLoading={isLoading}
-                        buttonText='Create User'
+                        buttonText={isEdit ? 'Edit User' : 'Create User'}
                     />
                 }
             />

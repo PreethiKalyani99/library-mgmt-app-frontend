@@ -43,7 +43,6 @@ const FormFields: React.FC<FormFieldsProps> = ({ fields, onChange }) => {
     return (
         <>
             {fields.map(field => (
-                console.log(field, "field props"),
                 <FormGroup className="mb-3" key={field.label}>
                     <FormLabel className={styles.form_label}>{field.label}</FormLabel>
                     {field?.autocomplete ?
@@ -79,6 +78,7 @@ const TextFields: React.FC<TextFieldsProps> = ({ field, onChange }) => {
             value={field.value}
             onChange={onChange}
             isInvalid={!!field?.error || false}
+            disabled={field.disabled ?? false}
         />
     )
 }
@@ -98,6 +98,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ field, onChange, onInputCha
             placeholder={field.placeholder}
             selected={field.value ? [field.value] : []}
             onChange={onChange}
+            disabled={field.disabled ?? false}
         />
     )
 }

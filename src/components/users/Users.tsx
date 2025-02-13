@@ -3,14 +3,19 @@ import { useUser } from "../../hooks/useUser";
 import { useAuth } from "../../hooks/useAuth";
 import { useUserAPI } from "../../hooks/useUserAPI";
 import { roles } from "../../constants/roles";
+import { userColumn } from "../../constants/tableColumns";
 import { Table } from "../common/table/Table";
 import { Pagination } from "../common/table/Pagination";
 import { Search } from "../common/search/Search";
 import CreateUser from "./CreateUser";
+import Actions from "../actions/Actions";
 import styles from "./Users.module.css"
 
 export default function Users() {
     const [showModal, setShowModal] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+    const [rowId, setRowId] = useState(0)
+
     const { userData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery } = useUser()
     const { role } = useAuth()
     const { getUser } = useUserAPI()
@@ -21,34 +26,33 @@ export default function Users() {
         }
     }, [currentPage, rowsPerPage])
 
-    const columnData = [
-        {
-            id: 1,
-            title: 'Email',
-            width: 200
-        },
-        {
-            id: 2,
-            title: 'Actions',
-            roles: [roles.ADMIN],
-            width: 100
-        }
-    ]
+    const toggleModal = () => {
+        setShowModal(!showModal) 
+    }
+
+    const handleEdit = (id: number) => {
+        toggleModal()
+        setIsEdit(true)
+        setRowId(id)
+    }
 
     const rowData = userData?.map(user => {
         return {
-            id: user.user_id ?? 0,
+            id: user.user_id,
             cells: [
                 {
                     cellData: user.email
                 },
                 {
-                    cellData: user.user_id
+                    cellData: user?.role?.role ?? '-'
+                },
+                {
+                    cellData: (<Actions onEdit={() => handleEdit(user.user_id)}/>)
                 },
             ]
         }
     })
-
+    
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
         setQuery(value)
@@ -70,10 +74,6 @@ export default function Users() {
         }
     }
 
-    const handleAddAuthors = () => {
-       setShowModal(!showModal) 
-    }
-
     return (
         <div className={styles.author_container}>
             <div className={styles.search_container}>
@@ -91,7 +91,7 @@ export default function Users() {
                         && 
                         <button 
                             className={styles.add_btn}
-                            onClick={handleAddAuthors}
+                            onClick={toggleModal}
                         >
                             + Add User
                         </button>
@@ -100,7 +100,7 @@ export default function Users() {
 
             <div className={styles.table_container}>
                 <Table
-                    columnData={columnData}
+                    columnData={userColumn}
                     rowData={rowData}
                 />
                 <Pagination
@@ -111,7 +111,14 @@ export default function Users() {
                     setRowsPerPage={setRowsPerPage}
                 />
             </div>
-            {showModal && <CreateUser setShowModal={setShowModal}/>}
+            {showModal && 
+                <CreateUser 
+                    setShowModal={setShowModal}
+                    setIsEdit={setIsEdit}
+                    isEdit={isEdit}
+                    rowId={rowId}
+                />
+            }
         </div>
     )
 }

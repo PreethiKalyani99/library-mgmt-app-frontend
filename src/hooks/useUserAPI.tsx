@@ -1,12 +1,12 @@
 import { useUser } from "./useUser"
-import { UserForm, GetApiProp } from "../types"
+import { UserFormProp, GetApiProp } from "../types"
 
 export const useUserAPI = () => {
     const { setUserData, setCount } = useUser()
 
     const token = localStorage.getItem("token")
 
-    const addUser = async (newUser: UserForm) => {
+    const addUser = async (newUser: UserFormProp) => {
         try {
             const response = await fetch("https://library-mgmt-us4m.onrender.com/users", {
                 method: "POST",
@@ -53,8 +53,36 @@ export const useUserAPI = () => {
         }
     }
 
+    interface RoleProp {
+        role: string
+        id: number 
+    }
+
+    const updateUser = async ({ role, id } : RoleProp) => {
+        try {
+            const response = await fetch(`https://library-mgmt-us4m.onrender.com/users/${id}`, {
+                method: "PUT",
+                headers: {
+                    "authorization": token || '',
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ role })
+            })
+
+            if (!response.ok) {
+                throw new Error(`Failed to update user, status: ${response.status}`)
+            }
+
+            const result = await response.json()
+        } catch (error) {
+            console.log(`Error updating user: ${error}`)
+            throw error
+        }
+    }
+
     return {
         addUser,
         getUser,
+        updateUser,
     }
 }
