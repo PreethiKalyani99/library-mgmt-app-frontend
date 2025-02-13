@@ -27,6 +27,7 @@ export const commonFields = (formData: Data, errors: Data) => [
 interface authorFieldProps {
     formData: AuthorForm
     errors?: AuthorForm
+    isEdit?: boolean
 }
 
 export const authorFields = ({ formData, errors }: authorFieldProps) => [
@@ -59,6 +60,7 @@ interface BookFieldProps {
     options?: string[]
     onInputChange?: (option: string) => void,
     onOptionChange?: (selected: any) => void,
+    isEdit?: boolean
 }
 
 export const bookFields = ({ formData, errors, options, onInputChange, onOptionChange }: BookFieldProps): Field[] => [
@@ -98,9 +100,10 @@ interface UserFormProp {
 interface UserFieldProp {
     formData: UserFormProp
     errors?: UserFormProp
+    isEdit?: boolean
 }
 
-export const userFields = ({ formData, errors }: UserFieldProp) => [
+export const userFields = ({ formData, errors, isEdit }: UserFieldProp) => [
     {
         label: "Email",
         name: 'email',
@@ -108,6 +111,7 @@ export const userFields = ({ formData, errors }: UserFieldProp) => [
         placeholder: 'Enter Email...',
         value: formData.email,
         error: errors?.email,
+        disabled: isEdit
     },
     {
         label: "Password",
@@ -116,6 +120,7 @@ export const userFields = ({ formData, errors }: UserFieldProp) => [
         placeholder: 'Enter Password...',
         value: formData.password,
         error: errors?.password,
+        disabled: isEdit,
     },
     {
         label: "Role",
@@ -142,6 +147,7 @@ interface BorrowFieldProp {
     onUserChange: (selected: string) => void
     bookOptions: any
     userOptions: any
+    isEdit?: boolean
 }
 
 export const borrowFields = ({ formData, errors, bookInputChange, userInputChange, onBookChange, onUserChange, bookOptions, userOptions }: BorrowFieldProp) => [
