@@ -21,7 +21,7 @@ export const useAuthorAPI = () => {
                 throw new Error(`Failed to add author, status: ${response.status}`)
             }
 
-            const result = await response.json()
+            await response.json()
         } catch (error) {
             console.log(`Error adding author: ${error}`)
             throw error
@@ -53,8 +53,59 @@ export const useAuthorAPI = () => {
         }
     }
 
+    interface UpdateAuthor {
+        id: number
+        author: {
+            name?: string
+            country?: string
+        }
+    }
+
+    const updateAuthor = async (authorProp: UpdateAuthor) => {
+        const { id, author } = authorProp
+        try {
+            const response = await fetch(`https://library-mgmt-us4m.onrender.com/authors/${id}`, {
+                method: "PUT",
+                headers: {
+                    "authorization": token || '',
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(author)
+            })
+
+            if (!response.ok) {
+                throw new Error(`Failed to delete author, status: ${response.status}`)
+            }
+
+            await response.json()
+        } catch (error) {
+            console.log(`Error deleting author: ${error}`)
+            throw error
+        }
+    }
+
+    const deleteAuthor = async (id: number) => {
+        try {
+            const response = await fetch(`https://library-mgmt-us4m.onrender.com/authors/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "authorization": token || '',
+                    "Content-Type": "application/json"
+                }
+            })
+
+            if (!response.ok) {
+                throw new Error(`Failed to delete author, status: ${response.status}`)
+            }
+        } catch (error) {
+            console.log(`Error deleting author: ${error}`)
+            throw error
+        }
+    }
     return {
         addAuthor,
         getAuthor,
+        updateAuthor,
+        deleteAuthor,
     }
 }

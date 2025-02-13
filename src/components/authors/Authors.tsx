@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import { Table } from "../common/table/Table";
 import { Pagination } from "../common/table/Pagination";
 import { Search } from "../common/search/Search";
@@ -8,53 +6,38 @@ import { useAuthorAPI } from "../../hooks/useAuthorAPI";
 import { useAuthor } from "../../hooks/useAuthor";
 import { roles } from "../../constants/roles";
 import { useAuth } from "../../hooks/useAuth";
+import { authorColumns } from "../../constants/tableColumns";
 import CreateAuthor from "./CreateAuthor";
+import Actions from "../actions/Actions";
 import styles from "./Authors.module.css"
-
-interface JwtPayload {
-    role: string
-}
 
 export default function Authors() {
     const [showModal, setShowModal] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+    const [rowId, setRowId] = useState(0)
+
     const { authorData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery } = useAuthor()
-    const navigate = useNavigate()
 
-    const { setRole, role } = useAuth()
-    const { getAuthor } = useAuthorAPI()
+    const { role } = useAuth()
+    const { getAuthor, deleteAuthor } = useAuthorAPI()
 
-    const token = localStorage.getItem("token") || ''
     useEffect(() => {
-        try {
-            if (token) {
-                const userRole = jwtDecode(token) as JwtPayload
-                setRole(userRole.role || "")
-                getAuthor({ pageNumber: currentPage, pageSize: rowsPerPage })
-            }
-        } catch (error) {
-            console.error("Error decoding token", error)
-            navigate("/")
-        }
-    }, [token, currentPage, rowsPerPage])
+        getAuthor({ pageNumber: currentPage, pageSize: rowsPerPage })
+    }, [currentPage, rowsPerPage])
 
-    const columnData = [
-        {
-            id: 1,
-            title: 'Name',
-            width: 200
-        },
-        {
-            id: 2,
-            title: 'Country',
-            width: 200
-        },
-        {
-            id: 3,
-            title: 'Actions',
-            roles: [roles.ADMIN, roles.LIBRARIAN],
-            width: 100
-        }
-    ]
+    const toggleModal = () => {
+        setShowModal(!showModal) 
+    }
+
+    const handleEdit = (id: number) => {
+        toggleModal()
+        setIsEdit(true)
+        setRowId(id)
+    }
+
+    const handleDelete = (id: number) => {
+        deleteAuthor(id)
+    }
 
     const rowData = authorData?.map(author => {
         return {
@@ -67,7 +50,7 @@ export default function Authors() {
                     cellData: author.country ?? '-'
                 },
                 {
-                    cellData: author.author_id
+                    cellData: (<Actions onEdit={() => handleEdit(author.author_id || 0)} onDelete={() => handleDelete(author.author_id || 0)}/>)
                 }
             ]
         }
@@ -94,10 +77,6 @@ export default function Authors() {
         }
     }
 
-    const handleAddAuthors = () => {
-       setShowModal(!showModal) 
-    }
-
     return (
         <div className={styles.author_container}>
             <div className={styles.search_container}>
@@ -115,7 +94,7 @@ export default function Authors() {
                         && 
                         <button 
                             className={styles.add_btn}
-                            onClick={handleAddAuthors}
+                            onClick={toggleModal}
                         >
                             + Add Author
                         </button>
@@ -124,7 +103,7 @@ export default function Authors() {
 
             <div className={styles.table_container}>
                 <Table
-                    columnData={columnData}
+                    columnData={authorColumns}
                     rowData={rowData}
                 />
                 <Pagination
@@ -135,7 +114,13 @@ export default function Authors() {
                     setRowsPerPage={setRowsPerPage}
                 />
             </div>
-            {showModal && <CreateAuthor setShowModal={setShowModal}/>}
+            {showModal && 
+                <CreateAuthor 
+                    setShowModal={setShowModal}
+                    isEdit={isEdit}
+                    rowId={rowId}
+                />
+            }
         </div>
     )
 }

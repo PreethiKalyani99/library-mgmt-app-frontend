@@ -27,7 +27,6 @@ export const commonFields = (formData: Data, errors: Data) => [
 interface authorFieldProps {
     formData: AuthorForm
     errors?: AuthorForm
-    isEdit?: boolean
 }
 
 export const authorFields = ({ formData, errors }: authorFieldProps) => [
@@ -60,7 +59,6 @@ interface BookFieldProps {
     options?: string[]
     onInputChange?: (option: string) => void,
     onOptionChange?: (selected: any) => void,
-    isEdit?: boolean
 }
 
 export const bookFields = ({ formData, errors, options, onInputChange, onOptionChange }: BookFieldProps): Field[] => [

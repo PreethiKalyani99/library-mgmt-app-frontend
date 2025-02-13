@@ -10,9 +10,11 @@ import { AuthorForm } from '../../types';
 
 interface CreateAuthorProp {
     setShowModal: (value: boolean) => void
+    isEdit: boolean
+    rowId: number
 }
 
-const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal }) => {
+const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal, isEdit, rowId }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [alertProps, setAlertProps] = useState({
         type: 'success',
@@ -26,7 +28,7 @@ const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal }) => {
         setIsAlertVisible,
     } = useAuthor()
 
-    const { addAuthor } = useAuthorAPI()
+    const { addAuthor, updateAuthor } = useAuthorAPI()
 
     const formFields = authorFields({ formData })
 
@@ -42,6 +44,17 @@ const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal }) => {
         e.preventDefault()
         try {
             setIsLoading(true)
+            if(isEdit){
+                const authorProp = {
+                    id: rowId,
+                    author: {
+                        name: formData.name,
+                        country: formData.country
+                    }
+                }
+                await updateAuthor(authorProp)
+                return
+            }
             await addAuthor(formData)
             setShowModal(false)
             setFormData({ name: '', country: '' })
@@ -74,7 +87,7 @@ const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal }) => {
                         onChange={handleInputChange}
                         onSubmit={handleSubmit}
                         isLoading={isLoading}
-                        buttonText='Create Author'
+                        buttonText={isEdit ? 'Edit Author' : 'Create Author'}
                     />
                 }
             />
