@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "../hooks/useUser";
 import { useAuth } from "../hooks/useAuth";
+import { nav } from "../constants/nav";
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import Authors from "./authors/Authors";
 import Books from "./books/Books";
 import Users from "./users/Users";
 import Borrowers from "./borrowed-books/Borrowers";
+import Dashboard from "./dashboard/Dashboard";
 
 interface JwtPayload {
     role: string
@@ -21,8 +23,9 @@ export default function Main(){
     const [userId, setUserId] = useState(0)
 
     const navigate = useNavigate()
+    const location = useLocation()
 
-    const { activeTab } = useUser()
+    const { activeTab, setActiveTab } = useUser()
     const { setRole } = useAuth()
 
     const token = localStorage.getItem("token") || ''
@@ -39,6 +42,13 @@ export default function Main(){
             navigate("/")
         }
     }, [])
+
+    useEffect(() => {
+        const matchPath = nav.find((item: any) => item.path === location.pathname)
+        if(matchPath){
+            setActiveTab(matchPath.tab)
+        }
+    }, [location.pathname])
 
     const handleClick = () => {
         setShowSidebar(!showSidebar)
@@ -58,9 +68,10 @@ export default function Main(){
                     />
                 </Col>
                 <Col md={8} lg={10} className="content-container">
+                    {activeTab === '' && <Dashboard/>}
                     {activeTab === 'authors' && <Authors/>}
                     {activeTab === 'books' && <Books/>}
-                    {activeTab === 'users' && <Users/>}
+                    {activeTab === 'user-management' && <Users/>}
                     {activeTab === 'borrowed-books' && <Borrowers userId={userId}/>}
                 </Col>
             </Row>

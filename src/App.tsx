@@ -36,7 +36,7 @@ function App() {
           } 
         />  
         <Route 
-          path='users' 
+          path='user-management' 
           element={
             <PrivateRoute 
               component={<Users />} 

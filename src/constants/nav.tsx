@@ -3,9 +3,9 @@ import { roles } from "./roles"
 export const nav = [
     {
         name: 'User Management',
-        path: '/home/users',
+        path: '/home/user-management',
         roles: [roles.ADMIN],
-        tab: 'users',
+        tab: 'user-management',
     },
     {
         name: 'Authors',
