@@ -8,17 +8,32 @@ import { Table } from "../common/table/Table";
 import { Pagination } from "../common/table/Pagination";
 import { Search } from "../common/search/Search";
 import CreateUser from "./CreateUser";
+import CreateRole from "./CreateRole";
 import Actions from "../actions/Actions";
 import styles from "./Users.module.css"
 
+interface RoleProp {
+    role_id: number
+    role: string
+}
+
 export default function Users() {
     const [showModal, setShowModal] = useState(false)
+    const [showRole, setShowRole] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
     const [rowId, setRowId] = useState(0)
 
-    const { userData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery, setFormData } = useUser()
+    const { userData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery, setFormData, setRoleData } = useUser()
     const { role } = useAuth() 
-    const { getUser } = useUserAPI()
+    const { getUser, getRoles } = useUserAPI()
+
+    useEffect(() => {
+        getRoles().then((data: RoleProp[]) => {
+            setRoleData(data.map((item) => item.role))
+        }).catch((error) => {
+            console.error("Error fetching roles:", error)
+        })
+    }, [])
 
     useEffect(() => {
         if(role === roles.ADMIN){
@@ -86,6 +101,10 @@ export default function Users() {
         }
     }
 
+    const toggleRoleModal = () => {
+        setShowRole(!showRole)
+    }
+
     return (
         <div className={styles.author_container}>
             <div className={styles.search_container}>
@@ -95,18 +114,26 @@ export default function Users() {
                         onChange={handleChange}
                         onSearch={handleSearch}
                         onkeydown={onKeyDown}
-                        placeholder="Search by Email..."
+                        placeholder="Search by Email or Role..."
                         />
                 </div>
                     {
                         (role === roles.ADMIN) 
                         && 
-                        <button 
-                            className={styles.add_btn}
-                            onClick={toggleModal}
-                        >
-                            + Add User
-                        </button>
+                        <div>
+                            <button 
+                                className={styles.add_btn}
+                                onClick={toggleRoleModal}
+                            >
+                                + Add Role
+                            </button>
+                            <button 
+                                className={styles.add_btn}
+                                onClick={toggleModal}
+                            >
+                                + Add User
+                            </button>
+                        </div>
                     }
             </div>
 
@@ -129,6 +156,11 @@ export default function Users() {
                     isEdit={isEdit}
                     rowId={rowId}
                     setIsEdit={setIsEdit}
+                />
+            }
+            {showRole && 
+                <CreateRole
+                    setShowRole={setShowRole}
                 />
             }
         </div>

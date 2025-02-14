@@ -80,9 +80,55 @@ export const useUserAPI = () => {
         }
     }
 
+    const createRole = async (role: string) => {
+        try {
+            const response = await fetch("https://library-mgmt-us4m.onrender.com/roles", {
+                method: "POST",
+                headers: {
+                    "authorization": token || '',
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ role })
+            })
+
+            if (!response.ok) {
+                throw new Error(`Failed to Create role, status: ${response.status}`)
+            }
+
+            const result = await response.json()
+        } catch (error) {
+            console.log(`Error creating role: ${error}`)
+            throw error
+        }
+    }
+
+    const getRoles = async () => {
+        try {
+            const response = await fetch("https://library-mgmt-us4m.onrender.com/roles", {
+                method: "GET",
+                headers: {
+                    "authorization": token || '',
+                    "Content-Type": "application/json"
+                }
+            })
+
+            if (!response.ok) {
+                throw new Error(`Failed to get roles, status: ${response.status}`)
+            }
+
+            const result = await response.json()
+            return result
+        } catch (error) {
+            console.log(`Error getting roles: ${error}`)
+            throw error
+        }
+    }
+
     return {
         addUser,
         getUser,
         updateUser,
+        createRole,
+        getRoles,
     }
 }

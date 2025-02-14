@@ -71,8 +71,8 @@ export const useBookAPI = () => {
     interface BookProp {
         id: number
         title?: string
-        published_year: string
-        author: AuthorProp
+        published_year?: string
+        author?: AuthorProp
     }
 
     const updateBook = async (bookProp: BookProp) => {
@@ -84,7 +84,7 @@ export const useBookAPI = () => {
                     "authorization": token,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ props })
+                body: JSON.stringify(props)
             })
 
             if (!response.ok) {

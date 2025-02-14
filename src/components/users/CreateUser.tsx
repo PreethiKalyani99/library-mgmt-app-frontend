@@ -27,10 +27,14 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId, set
         setFormData,
         isAlertVisible,
         setIsAlertVisible,
+        roleData,
     } = useUser()
     const { addUser, updateUser } = useUserAPI()
 
-    const formFields = userFields({ formData, isEdit })
+
+    const handleOptionChange = (selected: any) => {
+        setFormData({...formData, role: selected[0] || ''})
+    }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -39,6 +43,8 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId, set
             [name]: value
         }))
     }
+
+    const formFields = userFields({ formData, isEdit, options: roleData, onChange: handleOptionChange })
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -97,7 +103,7 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId, set
                 height={70}
                 title="User's Info"
                 close={handleClose}
-                body={
+                body={ 
                     <CustomForm
                         fields={formFields}
                         onChange={handleInputChange}

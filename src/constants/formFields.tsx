@@ -99,9 +99,11 @@ interface UserFieldProp {
     formData: UserFormProp
     errors?: UserFormProp
     isEdit?: boolean
+    onChange: (selected: any) => void
+    options: any
 }
 
-export const userFields = ({ formData, errors, isEdit }: UserFieldProp) => [
+export const userFields = ({ formData, errors, isEdit, onChange, options }: UserFieldProp) => [
     {
         label: "Email",
         name: 'email',
@@ -121,12 +123,15 @@ export const userFields = ({ formData, errors, isEdit }: UserFieldProp) => [
         disabled: isEdit,
     },
     {
+        autocomplete: true,
         label: "Role",
         name: 'role',
         type: 'text',
         placeholder: 'Enter Role...',
         value: formData.role,
         error: errors?.role,
+        onChange,
+        option: options
     },
 ]
 
@@ -189,5 +194,19 @@ export const borrowFields = ({ formData, errors, bookInputChange, userInputChang
         placeholder: 'Return Date',
         value: formData.returnDate,
         error: errors?.returnDate,
+    },
+]
+
+interface RoleFieldProp {
+    formData: string
+}
+
+export const roleField = ({ formData }: RoleFieldProp) => [
+    {
+        label: "Role",
+        name: 'role',
+        type: 'text',
+        placeholder: 'Enter Role...',
+        value: formData,
     },
 ]
