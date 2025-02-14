@@ -16,7 +16,7 @@ export default function Authors() {
     const [isEdit, setIsEdit] = useState(false)
     const [rowId, setRowId] = useState(0)
 
-    const { authorData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery } = useAuthor()
+    const { authorData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery, setFormData } = useAuthor()
 
     const { role } = useAuth()
     const { getAuthor, deleteAuthor } = useAuthorAPI()
@@ -33,6 +33,13 @@ export default function Authors() {
         toggleModal()
         setIsEdit(true)
         setRowId(id)
+
+        const author = authorData.find(a => a.author_id === id)
+        if(!author){
+            console.log("author not found")
+            return
+        }
+        setFormData({ name: author.name, country: author.country })
     }
 
     const handleDelete = (id: number) => {
@@ -119,6 +126,7 @@ export default function Authors() {
                     setShowModal={setShowModal}
                     isEdit={isEdit}
                     rowId={rowId}
+                    setIsEdit={setIsEdit}
                 />
             }
         </div>

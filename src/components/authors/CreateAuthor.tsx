@@ -12,9 +12,10 @@ interface CreateAuthorProp {
     setShowModal: (value: boolean) => void
     isEdit: boolean
     rowId: number
+    setIsEdit: (value: boolean) => void
 }
 
-const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal, isEdit, rowId }) => {
+const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal, isEdit, rowId, setIsEdit }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [alertProps, setAlertProps] = useState({
         type: 'success',
@@ -53,6 +54,9 @@ const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal, isEdit, rowId 
                     }
                 }
                 await updateAuthor(authorProp)
+                setIsEdit(false)
+                setShowModal(false)
+                setFormData({ name: '', country: '' })
                 return
             }
             await addAuthor(formData)
@@ -65,6 +69,14 @@ const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal, isEdit, rowId 
             setIsLoading(false)
             setIsAlertVisible(true)
         }
+    }
+
+    const handleClose = () => {
+        if(formData.name){
+            setIsEdit(false)
+            setFormData({ name: '', country: '' })
+        }
+        setShowModal(false)
     }
 
     return (
@@ -80,7 +92,7 @@ const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal, isEdit, rowId 
             <ModalLayout
                 height={70}
                 title="Author's Info"
-                close={() => setShowModal(false)}
+                close={handleClose}
                 body={
                     <CustomForm
                         fields={formFields}
