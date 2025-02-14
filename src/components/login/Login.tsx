@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { CustomForm } from '../common/form/Form';
 import { ModalLayout } from '../common/modal/Modal';
 import { commonFields } from '../../constants/formFields';
+import { commonFormValidation } from '../../utils/validation';
 
 interface LoginUser {
     email: string
@@ -20,11 +21,14 @@ const Login: React.FC = () => {
         email: '',
         password: ''
     })
+
+    const navigate = useNavigate()
+
     const { setToken } = useAuth()
 
     const formFields = commonFields(formData, errors)
 
-    const navigate = useNavigate()
+    const formValidationErrors = commonFormValidation(formData, 'login')
 
     const loginUser = async (user: LoginUser) => {
         try {
@@ -62,19 +66,8 @@ const Login: React.FC = () => {
         e.preventDefault()
         setIsLoading(true)
 
-        setErrors({ email: '', password: '' })
-
-        const error: { email?: string; password?: string } = {}
-
-        if (formData.email === '') {
-            error.email = "Email is required"
-        }
-        if (formData.password === '') {
-            error.password = "Password is required"
-        }
-
-        if (Object.keys(error).length > 0) {
-            setErrors(prev => ({ ...prev, ...error }))
+        if (Object.keys(formValidationErrors).length > 0) {
+            setErrors(prev => ({ ...prev, ...formValidationErrors }))
             return
         }
         try {
@@ -87,7 +80,7 @@ const Login: React.FC = () => {
             setIsLoading(false)
         }
         finally{
-             setIsLoading(false)
+            setIsLoading(false)
         }
     }
     

@@ -10,6 +10,8 @@ interface FormProp {
 interface BookContextProps {
     formData:  FormProp
     setFormData: (formData: FormProp) => void
+    errors:  FormProp
+    setErrors: (formData: FormProp) => void
     isAlertVisible: boolean
     setIsAlertVisible: (visible: boolean) => void
     bookData: BookForm[]
@@ -27,6 +29,8 @@ interface BookContextProps {
 export const BookContext = createContext<BookContextProps>({
     formData: {authorName: '', title: '', publishedYear: ''} ,
     setFormData: () => null,
+    errors: {authorName: '', title: '', publishedYear: ''} ,
+    setErrors: () => null,
     isAlertVisible: false,
     setIsAlertVisible: () => null,
     bookData: [],
@@ -53,6 +57,11 @@ export const BookProvider = ({children}: ProviderProp) => {
        title: '', 
        publishedYear: ''
     })
+    const [errors, setErrors] = useState<FormProp>({
+        authorName: '', 
+        title: '', 
+        publishedYear: ''
+    })
 
     useEffect(() => {
         if(isAlertVisible){
@@ -77,6 +86,8 @@ export const BookProvider = ({children}: ProviderProp) => {
            setRowsPerPage,
            query,
            setQuery,
+           errors,
+           setErrors,
         }
     }, [
         formData,
@@ -85,7 +96,8 @@ export const BookProvider = ({children}: ProviderProp) => {
         count,
         currentPage,
         rowsPerPage, 
-        query
+        query,
+        errors
     ])
 
     return <BookContext.Provider value={value}>{children}</BookContext.Provider>

@@ -7,6 +7,7 @@ import { Loader } from '../common/loader/Loader';
 import { useAuthor } from '../../hooks/useAuthor';
 import { useAuthorAPI } from '../../hooks/useAuthorAPI';
 import { AuthorForm } from '../../types';
+import { authorFormValidation } from '../../utils/validation';
 
 interface CreateAuthorProp {
     setShowModal: (value: boolean) => void
@@ -27,47 +28,59 @@ const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal, isEdit, rowId,
         setFormData,
         isAlertVisible,
         setIsAlertVisible,
+        setErrors,
+        errors
     } = useAuthor()
 
     const { addAuthor, updateAuthor } = useAuthorAPI()
 
-    const formFields = authorFields({ formData })
+    const formFields = authorFields({ formData, errors })
+
+    const formValidationErrors = authorFormValidation(formData)
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setFormData((prevState: AuthorForm) => ({
             ...prevState, 
             [name]: value
-          }))
+        }))
+    }
+
+    const handleEdit = async () => {
+        const authorProp = {
+            id: rowId,
+            author: {
+                name: formData.name,
+                country: formData.country
+            }
+        }
+        await updateAuthor(authorProp)
+        setIsEdit(false)
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        if (Object.keys(formValidationErrors).length > 0) {
+            setErrors({ name: formValidationErrors.name || '', country: formValidationErrors.country || ''})
+            return
+        }
         try {
             setIsLoading(true)
             if(isEdit){
-                const authorProp = {
-                    id: rowId,
-                    author: {
-                        name: formData.name,
-                        country: formData.country
-                    }
-                }
-                await updateAuthor(authorProp)
-                setIsEdit(false)
-                setShowModal(false)
-                setFormData({ name: '', country: '' })
-                return
+                await handleEdit()
             }
-            await addAuthor(formData)
-            setShowModal(false)
-            setFormData({ name: '', country: '' })
+            else{
+                await addAuthor(formData)
+                setShowModal(false)
+            }
             setAlertProps({ type: 'success', message: 'Author created successfully' })
+            setIsAlertVisible(true)
         } catch (error) {
             setAlertProps({ type: 'error', message: `Error: ${error}` })
+            setIsAlertVisible(true)
         } finally {
             setIsLoading(false)
-            setIsAlertVisible(true)
+            setFormData({ name: '', country: '' })
         }
     }
 
@@ -76,13 +89,14 @@ const CreateAuthor: React.FC<CreateAuthorProp> = ({ setShowModal, isEdit, rowId,
             setIsEdit(false)
             setFormData({ name: '', country: '' })
         }
+        setErrors({ name: '', country: '' })
         setShowModal(false)
     }
 
     return (
         <>
             {isLoading && <Loader />}
-            {isAlertVisible &&
+            {
                 <Alert
                     type={alertProps.type}
                     message={alertProps.message}

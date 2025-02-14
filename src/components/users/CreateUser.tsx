@@ -7,6 +7,7 @@ import { Loader } from '../common/loader/Loader';
 import { useUser } from "../../hooks/useUser";
 import { useUserAPI } from "../../hooks/useUserAPI";
 import { UserFormProp } from "../../types";
+import { commonFormValidation } from "../../utils/validation";
 
 interface CreateUserProp {
     setShowModal: (value: boolean) => void
@@ -28,13 +29,16 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId, set
         isAlertVisible,
         setIsAlertVisible,
         roleData,
+        errors,
+        setErrors,
     } = useUser()
     const { addUser, updateUser } = useUserAPI()
 
+    const formValidationErrors = commonFormValidation(formData, 'user')
 
     const handleOptionChange = (selected: any) => {
         setFormData({...formData, role: selected[0] || ''})
-    }
+    } 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -44,28 +48,36 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId, set
         }))
     }
 
-    const formFields = userFields({ formData, isEdit, options: roleData, onChange: handleOptionChange })
+    const formFields = userFields({ formData, isEdit, options: roleData, onChange: handleOptionChange, errors })
+
+    const handleEdit = async () => {
+        const user = {
+            role: formData.role,
+            id: rowId
+        }
+        await updateUser(user)
+        setIsEdit(false)
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        if (Object.keys(formValidationErrors).length > 0) {
+            setErrors({ 
+                email: formValidationErrors.email || '', 
+                password: formValidationErrors.password || '',
+                role: formValidationErrors.role || '',
+            })
+            return
+        }
+
         try {
             setIsLoading(true)
             if(isEdit){
-                const user = {
-                    role: formData.role,
-                    id: rowId
-                }
-                await updateUser(user)
-                setShowModal(false)
-                setIsEdit(false)
-                setFormData(prev => ({
-                    ...prev,
-                    email: '',
-                    role: ''
-                }))
-                return
+                await handleEdit()
             }
-            await addUser(formData)
+            else{
+                await addUser(formData)
+            }
             setShowModal(false)
             setFormData({ email: '', password: '', role: '' })
             setAlertProps({ type: 'success', message: 'User created successfully' })
@@ -86,6 +98,11 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId, set
             }))
             setIsEdit(false)
         }
+        setErrors({ 
+            email: '', 
+            password: '',
+            role: '',
+        })
         setShowModal(false)
     }
 

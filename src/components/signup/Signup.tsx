@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { isEmailValid, isPasswordValid } from '../../utils/validation';
 import { CustomForm } from '../common/form/Form';
 import { ModalLayout } from '../common/modal/Modal';
 import { commonFields } from '../../constants/formFields';
+import { commonFormValidation } from '../../utils/validation';
 interface CreateUserProp {
     email: string
     password: string
@@ -40,6 +40,8 @@ const Signup: React.FC = () => {
         }
     }
 
+    const formValidationErrors = commonFormValidation(formData, "signup")
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setFormData(prev => ({
@@ -50,19 +52,8 @@ const Signup: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setErrors({ email: '', password: '' })
-
-        const error: { email?: string; password?: string } = {}
-
-        if (!isEmailValid(formData.email)) {
-            error.email = 'Enter a valid email example@example.com'
-        }
-        if (!isPasswordValid(formData.password)) {
-            error.password = 'Password should be at least 8 characters long'
-        }
-
-        if (Object.keys(error).length > 0) {
-            setErrors(prev => ({ ...prev, ...error }))
+        if (Object.keys(formValidationErrors).length > 0) {
+            setErrors(prev => ({ ...prev, ...formValidationErrors }))
             return
         }
 

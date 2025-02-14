@@ -11,7 +11,9 @@ interface CreateRoleProp {
 export default function CreateRole({ setShowRole }: CreateRoleProp) {
     const [isLoading, setIsLoading] = useState(false)
     const [formData, setFormData] = useState('')
-    const formField = roleField({ formData })
+    const [error, setError] = useState('')
+
+    const formField = roleField({ formData, error })
 
     const { createRole } = useUserAPI()
 
@@ -21,6 +23,10 @@ export default function CreateRole({ setShowRole }: CreateRoleProp) {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        if(formData.trim() === ''){
+            setError('Role should not be empty')
+            return
+        }
         try {
             setIsLoading(true)
             await createRole(formData)

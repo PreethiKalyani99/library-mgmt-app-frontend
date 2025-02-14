@@ -9,6 +9,7 @@ import { useBook } from '../../hooks/useBook';
 import { useAuthor } from '../../hooks/useAuthor';
 import { useBookAPI } from '../../hooks/useBookAPI';
 import { useAuthorAPI } from '../../hooks/useAuthorAPI';
+import { bookFormValidation } from '../../utils/validation';
 
 interface CreateBookProp {
     setShowModal: (value: boolean) => void
@@ -29,6 +30,8 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId, set
         setFormData,
         isAlertVisible,
         setIsAlertVisible, 
+        errors,
+        setErrors,
     } = useBook()
     
     const { options, setOptions } = useAuthor()
@@ -56,15 +59,29 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId, set
         }, 1000),
     [])
 
-    const formFields = bookFields({ formData, options, onOptionChange: handleOptionChange, onInputChange: handleSearch })
+    const formFields = bookFields({ formData, options, onOptionChange: handleOptionChange, onInputChange: handleSearch, errors })
+
+    const formValidationErrors = bookFormValidation(formData)
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setFormData({ ...formData, [name]: value })
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleEdit = async () => {
+        const updateProp = {
+            id: rowId,
+            title: formData.title,
+            published_year: formData.publishedYear || '',
+            author:{
+                name: formData.authorName
+            }
+        }
+        await updateBook(updateProp)
+        setIsEdit(false)
+    }
+
+    const handleAdd = async () => {
         const newBook = {
             title: formData.title,
             published_year: formData.publishedYear || '',
@@ -72,26 +89,32 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId, set
                 name: formData.authorName
             } 
         }
+        await addBook(newBook)
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
         try {
             setIsLoading(true)
-            if(isEdit){
-                const updateProp = {
-                    id: rowId,
-                    title: formData.title,
-                    published_year: formData.publishedYear || '',
-                    author:{
-                        name: formData.authorName
-                    }
-                }
-                await updateBook(updateProp)
-                setIsEdit(false)
-                setShowModal(false)
-                setFormData({authorName: '', title: '', publishedYear: ''})
+            if (Object.keys(formValidationErrors).length > 0) {
+                setErrors({ 
+                    authorName: formValidationErrors.authorName || '', 
+                    title: formValidationErrors.title || '', 
+                    publishedYear: formValidationErrors.publishedYear || '' 
+                })
                 return
             }
-            await addBook(newBook)
+
+            if(isEdit){
+                await handleEdit() 
+            }
+            else{
+                await handleAdd()
+            }
             setShowModal(false)
-            setFormData({ authorName: '', title: '', publishedYear: '' })
+            if(formData.authorName){
+                setFormData({ authorName: '', title: '', publishedYear: '' })
+            }
             setAlertProps({ type: 'success', message: 'Book created successfully' })
         }
         catch (error) {
@@ -108,6 +131,11 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId, set
             setIsEdit(false)
             setFormData({authorName: '', title: '', publishedYear: ''})
         }
+        setErrors({ 
+            authorName: '', 
+            title: '', 
+            publishedYear: '' 
+        })
         setShowModal(false)
     }
     

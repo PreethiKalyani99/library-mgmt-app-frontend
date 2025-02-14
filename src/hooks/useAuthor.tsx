@@ -4,6 +4,8 @@ import { ProviderProp, AuthorForm } from "../types";
 interface AuthorContextProps {
     formData:  AuthorForm
     setFormData: (formData: AuthorForm) => void
+    errors:  AuthorForm
+    setErrors: (formData: AuthorForm) => void
     authorData: AuthorForm[]
     setAuthorData: (value: React.SetStateAction<AuthorForm[]>) => void
     isAlertVisible: boolean
@@ -37,6 +39,8 @@ export const AuthorContext = createContext<AuthorContextProps>({
     setRowsPerPage: () => null,
     query: '',
     setQuery: () => null,
+    errors: {name: '', country: ''} ,
+    setErrors: () => {},
 })
 
 export const AuthorProvider = ({children}: ProviderProp) => {
@@ -48,6 +52,10 @@ export const AuthorProvider = ({children}: ProviderProp) => {
     const [options, setOptions] = useState<string[]>([])
     const [query, setQuery] = useState('')
     const [formData, setFormData] = useState<AuthorForm>({
+        name: '',
+        country: ''
+    })
+    const [errors, setErrors] = useState<AuthorForm>({
         name: '',
         country: ''
     })
@@ -77,6 +85,8 @@ export const AuthorProvider = ({children}: ProviderProp) => {
            setRowsPerPage,
            query,
            setQuery,
+           errors,
+           setErrors,
         }
     }, [
         formData,
@@ -87,6 +97,7 @@ export const AuthorProvider = ({children}: ProviderProp) => {
         currentPage,
         rowsPerPage,
         query,
+        errors
     ])
 
     return <AuthorContext.Provider value={value}>{children}</AuthorContext.Provider>

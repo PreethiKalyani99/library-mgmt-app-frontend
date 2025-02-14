@@ -11,6 +11,8 @@ interface FormProp {
 interface BorrowContextProps {
     formData:  FormProp
     setFormData: (formData: FormProp) => void
+    errors:  FormProp
+    setErrors: (errors: FormProp) => void
     isAlertVisible: boolean
     setIsAlertVisible: (visible: boolean) => void
     borrowData: BorrowDataProp[]
@@ -37,6 +39,13 @@ export const BorrowContext = createContext<BorrowContextProps>({
         returnDate: ''
     } ,
     setFormData: () => null,
+    errors: {
+        title: '',
+        borrower: '',
+        borrowDate: '',
+        returnDate: ''
+    },
+    setErrors: () => null,
     isAlertVisible: false,
     setIsAlertVisible: () => null,
     borrowData: [],
@@ -70,6 +79,12 @@ export const BorrowProvider = ({children}: ProviderProp) => {
         borrowDate: '',
         returnDate: ''
     })
+    const [errors, setErrors] = useState<FormProp>({
+        title: '',
+        borrower: '',
+        borrowDate: '',
+        returnDate: ''
+    })
 
     useEffect(() => {
         if(isAlertVisible){
@@ -98,6 +113,8 @@ export const BorrowProvider = ({children}: ProviderProp) => {
            setBookOptions,
            userOptions,
            setUserOptions,
+           errors,
+           setErrors,
         }
     }, [
         formData,
@@ -109,6 +126,7 @@ export const BorrowProvider = ({children}: ProviderProp) => {
         query,
         bookOptions,
         userOptions,
+        errors,
     ])
 
     return <BorrowContext.Provider value={value}>{children}</BorrowContext.Provider>

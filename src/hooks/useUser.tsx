@@ -16,6 +16,8 @@ interface UserProviderProp {
     setUserData: (value: UserForm[]) => void
     formData: UserFormProp
     setFormData: (value: React.SetStateAction<UserFormProp>) => void
+    errors: UserFormProp
+    setErrors: (value: UserFormProp) => void
     isAlertVisible: boolean
     setIsAlertVisible: (visible: boolean) => void
     roleData: string[]
@@ -37,6 +39,8 @@ export const UserContext = createContext<UserProviderProp>({
     setUserData: () => null,
     formData: {email: '', password: '', role: ''},
     setFormData: () => null,
+    errors: {email: '', password: '', role: ''},
+    setErrors: () => null,
     isAlertVisible: false,
     setIsAlertVisible: () => null,
     roleData: [],
@@ -53,6 +57,9 @@ export const UserProvider = ({ children }: ProviderProp) => {
     const [query, setQuery] = useState('')
     const [isAlertVisible, setIsAlertVisible] = useState(false)
     const [formData, setFormData] = useState({
+        email: '', password: '', role: ''
+    })
+    const [errors, setErrors] = useState({
         email: '', password: '', role: ''
     })
     
@@ -76,6 +83,8 @@ export const UserProvider = ({ children }: ProviderProp) => {
             setIsAlertVisible,
             roleData,
             setRoleData,
+            errors,
+            setErrors,
         }
     }, [
         activeTab,
@@ -87,6 +96,7 @@ export const UserProvider = ({ children }: ProviderProp) => {
         formData,
         isAlertVisible,
         roleData,
+        errors,
     ])
     
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>

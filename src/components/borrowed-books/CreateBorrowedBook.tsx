@@ -9,6 +9,7 @@ import { CustomForm } from "../common/form/Form"
 import { ModalLayout } from "../common/modal/Modal"
 import { Alert } from "../common/alert/Alert"
 import { Loader } from "../common/loader/Loader"
+import { borrowFormValidation } from "../../utils/validation"
 
 interface CreateProp {
     setShowModal: (modal: boolean) => void
@@ -33,6 +34,8 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal, isEdit, rowId,
         setBookOptions,
         userOptions,
         setUserOptions,
+        errors,
+        setErrors,
 
     } = useBorrow()
     const { getBook } = useBookAPI()
@@ -87,16 +90,27 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal, isEdit, rowId,
         userInputChange: handleUserSearch,
         onBookChange: handleBookChange,
         onUserChange: handleUserChange,
-        isEdit
+        isEdit,
+        errors,
     })
+
+    const formValidationErrors = borrowFormValidation(formData)
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setFormData({ ...formData, [name]: value })
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleEdit = async () => {
+        const updateProp = {
+            id: rowId,
+            return_date: formData.returnDate,
+            borrow_date: formData.borrowDate
+        }
+        await updateBorrower(updateProp)
+        setIsEdit(false)
+    }
+    const handleAdd = async () => {
         const newUser = {
             borrow_date: formData.borrowDate,
             return_date: formData.returnDate || null,
@@ -107,21 +121,28 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal, isEdit, rowId,
                 email: formData.borrower
             }
         }
+        await addBorrower(newUser) 
+    }
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (Object.keys(formValidationErrors).length > 0) {
+            setErrors({ 
+                title: formValidationErrors.title || '', 
+                borrower: formValidationErrors.borrower || '',
+                borrowDate: formValidationErrors.borrowDate || '',
+                returnDate: formValidationErrors.returnDate || ''
+            })
+            return
+        }
+
         try {
             setIsLoading(true)
             if(isEdit){
-                const updateProp = {
-                    id: rowId,
-                    return_date: formData.returnDate,
-                    borrow_date: formData.borrowDate
-                }
-                await updateBorrower(updateProp)
-                setShowModal(false)
-                setFormData({ borrowDate: '', returnDate: '', title: '', borrower: '' })
-                setIsEdit(false)
-                return
+                await handleEdit()
             }
-            await addBorrower(newUser) 
+            else{
+                await handleAdd()
+            }
             setShowModal(false)
             setFormData({ borrowDate: '', returnDate: '', title: '', borrower: '' })
             setAlertProps({ type: 'success', message: 'Borrower created successfully' })
@@ -140,6 +161,12 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal, isEdit, rowId,
             setFormData({ borrowDate: '', returnDate: '', title: '', borrower: '' })
             setIsEdit(false)
         }
+        setErrors({ 
+            title: '', 
+            borrower: '',
+            borrowDate: '',
+            returnDate: ''
+        })
         setShowModal(false)
     }
 

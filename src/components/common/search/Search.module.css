@@ -1,7 +1,6 @@
 .search_container{
     display: flex;
     border: 1px solid black;
-    width: 70%;
 }
 
 .input_box {

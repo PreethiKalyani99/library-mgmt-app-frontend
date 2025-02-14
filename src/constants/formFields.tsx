@@ -86,7 +86,8 @@ export const bookFields = ({ formData, errors, options, onInputChange, onOptionC
         name: 'publishedYear',
         type: 'text',
         placeholder: 'Enter Title...',
-        value: formData.publishedYear || ''
+        value: formData.publishedYear || '',
+        error: errors?.publishedYear
     } 
 ]
 
@@ -199,14 +200,16 @@ export const borrowFields = ({ formData, errors, bookInputChange, userInputChang
 
 interface RoleFieldProp {
     formData: string
+    error: string
 }
 
-export const roleField = ({ formData }: RoleFieldProp) => [
+export const roleField = ({ formData, error }: RoleFieldProp) => [
     {
         label: "Role",
         name: 'role',
         type: 'text',
         placeholder: 'Enter Role...',
         value: formData,
+        error
     },
 ]

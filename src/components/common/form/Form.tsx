@@ -99,6 +99,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ field, onChange, onInputCha
             selected={field.value ? [field.value] : []}
             onChange={onChange}
             disabled={field.disabled ?? false}
+            isInvalid={!!field?.error || false}
         />
     )
 }
