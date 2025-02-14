@@ -61,3 +61,32 @@ export const bookColumns = [
         width: 100
     }
 ]
+
+export const borrowBookColumns = [
+    {
+        id: 1,
+        title: 'Book Title',
+        width: 200
+    },
+    {
+        id: 2,
+        title: 'Borrower',
+        width: 200
+    },
+    {
+        id: 3,
+        title: 'Borrow Date',
+        width: 200
+    },
+    {
+        id: 4,
+        title: 'Return Date',
+        width: 200
+    },
+    {
+        id: 5,
+        title: 'Actions',
+        roles: [roles.ADMIN, roles.LIBRARIAN, roles.RECEPTIONIST],
+        width: 100
+    }
+]

@@ -148,7 +148,7 @@ interface BorrowFieldProp {
     isEdit?: boolean
 }
 
-export const borrowFields = ({ formData, errors, bookInputChange, userInputChange, onBookChange, onUserChange, bookOptions, userOptions }: BorrowFieldProp) => [
+export const borrowFields = ({ formData, errors, bookInputChange, userInputChange, onBookChange, onUserChange, bookOptions, userOptions, isEdit }: BorrowFieldProp) => [
     {
         autocomplete: true,
         label: "Title",
@@ -158,7 +158,8 @@ export const borrowFields = ({ formData, errors, bookInputChange, userInputChang
         value: formData.title,
         inputChange: bookInputChange,
         onChange: onBookChange,
-        option: bookOptions
+        option: bookOptions,
+        disabled: isEdit
     },
     {
         autocomplete: true,
@@ -169,7 +170,8 @@ export const borrowFields = ({ formData, errors, bookInputChange, userInputChang
         error: errors?.borrower,
         inputChange: userInputChange,
         onChange: onUserChange,
-        option: userOptions
+        option: userOptions,
+        disabled: isEdit
     },
     {
         label: "Borrow Date",
@@ -178,6 +180,7 @@ export const borrowFields = ({ formData, errors, bookInputChange, userInputChang
         placeholder: 'Borrow Date',
         value: formData.borrowDate,
         error: errors?.borrowDate,
+        disabled: isEdit
     },
     {
         label: "Return Date",
