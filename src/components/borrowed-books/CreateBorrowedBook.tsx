@@ -12,9 +12,12 @@ import { Loader } from "../common/loader/Loader"
 
 interface CreateProp {
     setShowModal: (modal: boolean) => void
+    isEdit: boolean
+    rowId: number
+    setIsEdit: (value: boolean) => void
 }
 
-const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal }) => {
+const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal, isEdit, rowId, setIsEdit }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [alertProps, setAlertProps] = useState({
         type: 'success',
@@ -29,11 +32,12 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal }) => {
         bookOptions,
         setBookOptions,
         userOptions,
-        setUserOptions
+        setUserOptions,
+
     } = useBorrow()
     const { getBook } = useBookAPI()
     const { getUser } = useUserAPI()
-    const { addBorrower } = useBorrowAPI()
+    const { addBorrower, updateBorrower } = useBorrowAPI()
 
     const handleBookChange = (selected: any) => {
         setFormData({ ...formData, title: selected[0] || '' })
@@ -82,7 +86,8 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal }) => {
         bookInputChange: handleBookSearch,
         userInputChange: handleUserSearch,
         onBookChange: handleBookChange,
-        onUserChange: handleUserChange
+        onUserChange: handleUserChange,
+        isEdit
     })
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +109,18 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal }) => {
         }
         try {
             setIsLoading(true)
+            if(isEdit){
+                const updateProp = {
+                    id: rowId,
+                    return_date: formData.returnDate,
+                    borrow_date: formData.borrowDate
+                }
+                await updateBorrower(updateProp)
+                setShowModal(false)
+                setFormData({ borrowDate: '', returnDate: '', title: '', borrower: '' })
+                setIsEdit(false)
+                return
+            }
             await addBorrower(newUser) 
             setShowModal(false)
             setFormData({ borrowDate: '', returnDate: '', title: '', borrower: '' })
@@ -116,6 +133,14 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal }) => {
             setIsLoading(false)
             setIsAlertVisible(true)
         }
+    }
+
+    const handleClose = () => {
+        if(formData.title){
+            setFormData({ borrowDate: '', returnDate: '', title: '', borrower: '' })
+            setIsEdit(false)
+        }
+        setShowModal(false)
     }
 
     return (
@@ -131,13 +156,13 @@ const CreateBorrowedBook: React.FC<CreateProp> = ({ setShowModal }) => {
             <ModalLayout
                 height={70}
                 title="Borrower Info"
-                close={() => setShowModal(false)}
+                close={handleClose}
                 body={
                     <CustomForm
                         fields={formFields}
                         onChange={handleInputChange}
                         onSubmit={handleSubmit}
-                        buttonText='Create Borrower'
+                        buttonText={isEdit ? 'Edit Borrower' : 'Create Borrower'}
                     />
                 }
             />

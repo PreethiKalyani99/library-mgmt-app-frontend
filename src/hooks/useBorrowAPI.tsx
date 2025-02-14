@@ -7,7 +7,13 @@ export const useBorrowAPI = () => {
     const token = localStorage.getItem("token")
 
     const addBorrower = async (newBorrower: BorrowFormData) => {
+        const { return_date, borrow_date } = newBorrower
+
         try {
+            if(return_date && (new Date(borrow_date) >= new Date(return_date))){
+                throw new Error("Borrow date should be earlier than return date")
+            }
+
             const response = await fetch("https://library-mgmt-us4m.onrender.com/borrow", {
                 method: "POST",
                 headers: {
@@ -82,9 +88,42 @@ export const useBorrowAPI = () => {
         }
     }
 
+    interface BorrowerProp {
+        id: number
+        return_date: string
+        borrow_date: string
+    }
+
+    const updateBorrower = async (updateProp: BorrowerProp) => {
+        const { id, return_date, borrow_date } = updateProp
+        try {
+            if(new Date(borrow_date) >= new Date(return_date)){
+                throw new Error("Borrow date should be earlier than return date")
+            }
+            const response = await fetch(`https://library-mgmt-us4m.onrender.com/borrow/${id}`, {
+                method: "PUT",
+                headers: {
+                    "authorization": token || '',
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ return_date })
+            })
+
+            if (!response.ok) {
+                throw new Error(`Failed to add borrower, status: ${response.status}`)
+            }
+
+            const result = await response.json()
+        } catch (error) {
+            console.log(`Error adding borrower: ${error}`)
+            throw error
+        }
+    }
+
     return {
         addBorrower,
         getBorrower,
         getBorrowerById,
+        updateBorrower,
     }
 }

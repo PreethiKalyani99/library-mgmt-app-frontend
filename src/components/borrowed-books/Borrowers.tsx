@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useBorrowAPI } from "../../hooks/useBorrowAPI";
 import { useBorrow } from "../../hooks/useBorrow";
@@ -7,64 +6,56 @@ import { Table } from "../common/table/Table";
 import { Pagination } from "../common/table/Pagination";
 import { Search } from "../common/search/Search";
 import { roles } from "../../constants/roles";
+import { borrowBookColumns } from "../../constants/tableColumns";
 import CreateBorrowedBook from "./CreateBorrowedBook";
+import Actions from "../actions/Actions";
 import styles from "./Borrowers.module.css"
 
 interface BorrowersProp {
     userId?: number | undefined
 }
 
-export default function Borrowers({ userId }: BorrowersProp) {
+export default function Borrowers({ userId }: BorrowersProp) { 
     const [showModal, setShowModal] = useState(false)
-    const navigate = useNavigate()
+    const [isEdit, setIsEdit] = useState(false)
+    const [rowId, setRowId] = useState(0)
+
     const { role } = useAuth()
     const { getBorrower, getBorrowerById } = useBorrowAPI()
-    const { borrowData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery } = useBorrow()
+    const { borrowData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery, setFormData } = useBorrow()
+
     useEffect(() => {
-        try {
-            if (userId && role === roles.READER) {
-                getBorrowerById({ id: userId, pageNumber: currentPage, pageSize: rowsPerPage })
-                return
-            }
-            if (role === roles.ADMIN || role === roles.LIBRARIAN || role === roles.RECEPTIONIST) {
-                getBorrower({ pageNumber: currentPage, pageSize: rowsPerPage })
-                return
-            }
+        if (userId && role === roles.READER) {
+            getBorrowerById({ id: userId, pageNumber: currentPage, pageSize: rowsPerPage })
+            return
         }
-        catch (error) {
-            console.error("Error decoding token", error)
-            navigate("/")
+        if (role === roles.ADMIN || role === roles.LIBRARIAN || role === roles.RECEPTIONIST) {
+            getBorrower({ pageNumber: currentPage, pageSize: rowsPerPage })
+            return
         }
     }, [role, currentPage, rowsPerPage, userId])
 
-    const columnData = [
-        {
-            id: 1,
-            title: 'Book Title',
-            width: 200
-        },
-        {
-            id: 2,
-            title: 'Borrower',
-            width: 200
-        },
-        {
-            id: 3,
-            title: 'Borrow Date',
-            width: 200
-        },
-        {
-            id: 4,
-            title: 'Return Date',
-            width: 200
-        },
-        {
-            id: 5,
-            title: 'Actions',
-            roles: [roles.ADMIN, roles.LIBRARIAN, roles.RECEPTIONIST],
-            width: 100
+    const toggleModal = () => {
+        setShowModal(!showModal) 
+    }
+
+    const handleEdit = (id: number) => {
+        toggleModal()
+        setIsEdit(true)
+        setRowId(id)
+        const borrower = borrowData.find(user => user.id === id)
+        if (!borrower) {
+            console.error("Borrower not found");
+            return
         }
-    ]
+
+        setFormData({
+            title: borrower.books.title,
+            borrower: borrower.users.email,
+            borrowDate: borrower.borrow_date,
+            returnDate: borrower.return_date || '',
+        })
+    }
 
     const rowData = borrowData?.map(borrower => {
         return {
@@ -83,7 +74,7 @@ export default function Borrowers({ userId }: BorrowersProp) {
                     cellData: borrower.return_date ?? 'Not returned'
                 },
                 {
-                    cellData: borrower.id
+                    cellData: (<Actions onEdit={() => handleEdit(borrower.id || 0)}/>)
                 }
             ]
         }
@@ -110,10 +101,6 @@ export default function Borrowers({ userId }: BorrowersProp) {
         }
     }
 
-    const handleAddBooks = () => {
-        setShowModal(!showModal)
-    }
-
     return (
         <div className={styles.author_container}>
             <div className={styles.search_container}>
@@ -131,7 +118,7 @@ export default function Borrowers({ userId }: BorrowersProp) {
                     &&
                     <button
                         className={styles.add_btn}
-                        onClick={handleAddBooks}
+                        onClick={toggleModal}
                     >
                         + Add Borrower
                     </button>
@@ -140,7 +127,7 @@ export default function Borrowers({ userId }: BorrowersProp) {
 
             <div className={styles.table_container}>
                 <Table
-                    columnData={columnData}
+                    columnData={borrowBookColumns}
                     rowData={rowData}
                 />
                 <Pagination
@@ -151,7 +138,14 @@ export default function Borrowers({ userId }: BorrowersProp) {
                     setRowsPerPage={setRowsPerPage}
                 />
             </div>
-            {showModal && <CreateBorrowedBook setShowModal={setShowModal} />}
+            {showModal && 
+                <CreateBorrowedBook 
+                    setShowModal={setShowModal} 
+                    isEdit={isEdit}
+                    rowId={rowId}
+                    setIsEdit={setIsEdit}
+                />
+            }
         </div>
     )
 }
