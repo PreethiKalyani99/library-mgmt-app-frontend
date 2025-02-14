@@ -18,7 +18,7 @@ export default function Books() {
 
     const { role } = useAuth()
     const { getBook, deleteBook } = useBookAPI()
-    const { bookData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery } = useBook()
+    const { bookData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery, setFormData } = useBook()
 
     useEffect(() => {
         getBook({ pageNumber: currentPage, pageSize: rowsPerPage })
@@ -33,6 +33,13 @@ export default function Books() {
         toggleModal()
         setIsEdit(true)
         setRowId(id)
+
+        const book = bookData.find(item => item.book_id === id)
+        if(!book){
+            console.log("book not found")
+            return 
+        }
+        setFormData({authorName: book.author.name, title: book.title, publishedYear: book.published_year?.toString()})
     }
 
     const handleDelete = (id: number) => {
@@ -122,6 +129,7 @@ export default function Books() {
                     setShowModal={setShowModal}
                     isEdit={isEdit}
                     rowId={rowId} 
+                    setIsEdit={setIsEdit}
                 />
             }
         </div>

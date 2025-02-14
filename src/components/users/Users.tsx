@@ -16,7 +16,7 @@ export default function Users() {
     const [isEdit, setIsEdit] = useState(false)
     const [rowId, setRowId] = useState(0)
 
-    const { userData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery } = useUser()
+    const { userData, count, currentPage, setCurrentPage, rowsPerPage, setRowsPerPage, query, setQuery, setFormData } = useUser()
     const { role } = useAuth() 
     const { getUser } = useUserAPI()
 
@@ -34,6 +34,18 @@ export default function Users() {
         toggleModal()
         setIsEdit(true)
         setRowId(id)
+
+        const user = userData.find(user => user.user_id === id)
+        if(!user){
+            console.log("user not found")
+            return 
+        }
+
+        setFormData((prev) => ({
+            ...prev,
+            email: user.email,
+            role: user?.role?.role ?? '-',
+        }))
     }
 
     const rowData = userData?.map(user => {
@@ -116,6 +128,7 @@ export default function Users() {
                     setShowModal={setShowModal}
                     isEdit={isEdit}
                     rowId={rowId}
+                    setIsEdit={setIsEdit}
                 />
             }
         </div>

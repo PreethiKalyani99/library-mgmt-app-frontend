@@ -14,9 +14,10 @@ interface CreateBookProp {
     setShowModal: (value: boolean) => void
     isEdit: boolean
     rowId: number
+    setIsEdit: (value: boolean) => void
 }
 
-const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId }) => {
+const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId, setIsEdit }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [alertProps, setAlertProps] = useState({
         type: 'success',
@@ -83,6 +84,10 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId }) =
                     }
                 }
                 await updateBook(updateProp)
+                setIsEdit(false)
+                setShowModal(false)
+                setFormData({authorName: '', title: '', publishedYear: ''})
+                return
             }
             await addBook(newBook)
             setShowModal(false)
@@ -96,6 +101,14 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId }) =
             setIsLoading(false)
             setIsAlertVisible(true)
         }
+    }
+
+    const handleClose = () => {
+        if(formData.authorName){
+            setIsEdit(false)
+            setFormData({authorName: '', title: '', publishedYear: ''})
+        }
+        setShowModal(false)
     }
     
     return (
@@ -111,7 +124,7 @@ const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId }) =
             <ModalLayout
                 height={70}
                 title="Book Info"
-                close={() => setShowModal(false)}
+                close={handleClose}
                 body={
                     <CustomForm
                         fields={formFields}

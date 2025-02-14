@@ -12,9 +12,10 @@ interface CreateUserProp {
     setShowModal: (value: boolean) => void
     isEdit: boolean
     rowId: number
+    setIsEdit: (value: boolean) => void
 }
 
-const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId }) => {
+const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId, setIsEdit }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [alertProps, setAlertProps] = useState({
         type: 'success',
@@ -49,6 +50,13 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId }) =
                     id: rowId
                 }
                 await updateUser(user)
+                setShowModal(false)
+                setIsEdit(false)
+                setFormData(prev => ({
+                    ...prev,
+                    email: '',
+                    role: ''
+                }))
                 return
             }
             await addUser(formData)
@@ -61,6 +69,18 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId }) =
             setIsLoading(false)
             setIsAlertVisible(true)
         }
+    }
+
+    const handleClose = () => {
+        if(formData.email){
+            setFormData(prev => ({
+                ...prev,
+                email: '',
+                role: ''
+            }))
+            setIsEdit(false)
+        }
+        setShowModal(false)
     }
 
     return (
@@ -76,7 +96,7 @@ const CreateUser: React.FC<CreateUserProp> = ({ setShowModal, isEdit, rowId }) =
             <ModalLayout
                 height={70}
                 title="User's Info"
-                close={() => setShowModal(false)}
+                close={handleClose}
                 body={
                     <CustomForm
                         fields={formFields}
