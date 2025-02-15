@@ -1,10 +1,10 @@
 import { useUser } from "./useUser"
 import { UserFormProp, GetApiProp } from "../types"
+import { useAuth } from "./useAuth"
 
 export const useUserAPI = () => {
     const { setUserData, setCount } = useUser()
-
-    const token = localStorage.getItem("token")
+    const { token } = useAuth()
 
     const addUser = async (newUser: UserFormProp) => {
         try {

@@ -9,7 +9,7 @@
 }
 
 .sidebar_item:hover {
-    background-color: #333;
+    background-color: var(--button-color);
     color: white;
     cursor: pointer;
 }

@@ -12,10 +12,12 @@ import Books from "./books/Books";
 import Users from "./users/Users";
 import Borrowers from "./borrowed-books/Borrowers";
 import Dashboard from "./dashboard/Dashboard";
+import Cookies from "js-cookie";
 
 interface JwtPayload {
     role: string
     user_id: number 
+    exp: number
 }
 
 export default function Main(){
@@ -26,15 +28,20 @@ export default function Main(){
     const location = useLocation()
 
     const { activeTab, setActiveTab } = useUser()
-    const { setRole } = useAuth()
+    const { setRole, setToken, isExpired } = useAuth()
 
-    const token = localStorage.getItem("token") || ''
+    const token = Cookies.get('token')
 
     useEffect(() => {
         try {
             if (token) {
-                const { role: userRole, user_id: user_ID} = jwtDecode(token) as JwtPayload
+                const { role: userRole, user_id: user_ID, exp} = jwtDecode(token) as JwtPayload
+                if (isExpired(exp)) {
+                    navigate("/")
+                }
+
                 setRole(userRole || "")
+                setToken(token)
                 setUserId(user_ID)
             }
         } catch (error) {

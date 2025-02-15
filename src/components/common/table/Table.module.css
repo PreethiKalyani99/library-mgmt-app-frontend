@@ -80,7 +80,7 @@ td {
 
 th {
     padding: 0.75rem;
-    background-color: #333;
+    background-color: var(--button-color);
     color: white;
 }
 
@@ -89,7 +89,7 @@ td {
 }
 
 tr:hover {
-    background-color: #ddd;
+    background-color: var(--background);
 }
 
 @media (max-width: 799px){ /* small screen */

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactNode } from "react";
+import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
 interface PrivateRouteProp {
@@ -13,7 +14,7 @@ interface JwtPayload {
 }
 const PrivateRoute = ({ component, allowedRoles }: PrivateRouteProp) => {
     const navigate = useNavigate()
-    const token = localStorage.getItem("token")
+    const token = Cookies.get("token")
     
     useEffect(() => {
         if(!token){

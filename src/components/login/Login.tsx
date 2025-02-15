@@ -5,6 +5,7 @@ import { CustomForm } from '../common/form/Form';
 import { ModalLayout } from '../common/modal/Modal';
 import { commonFields } from '../../constants/formFields';
 import { commonFormValidation } from '../../utils/validation';
+import Cookies from 'js-cookie';
 
 interface LoginUser {
     email: string
@@ -46,7 +47,7 @@ const Login: React.FC = () => {
 
             const result = await response.json()
             setToken(result.token)
-            localStorage.setItem("token", result.token)
+            Cookies.set('token', result.token, { expires: 1/24, secure: true })
 
         } catch (error) {
             console.log(`Error login user: ${error}`)

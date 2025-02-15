@@ -1,5 +1,6 @@
 import { useBook } from "./useBook";
 import { GetApiProp } from "../types";
+import { useAuth } from "./useAuth";
 
 interface AuthorProp {
     id?: string
@@ -14,7 +15,7 @@ interface AddBookProp {
 
 export const useBookAPI = () => {
     const { setBookData, setCount } = useBook()
-    const token = localStorage.getItem("token") || ''
+    const { token } = useAuth()
 
     const addBook = async (newBook: AddBookProp) => {
         try {

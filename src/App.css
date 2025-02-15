@@ -1,7 +1,29 @@
+:root {
+    --button-color: #333;
+    --background: #ddd;
+}
+
 .form-control.is-invalid {
     background-image: none !important;
 }
 
 .form-select{
     height: 50px !important;
+}
+
+.main-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-container{
+    display: flex;
+}
+
+.row-container{
+    margin: 0 !important;
+}
+
+.col-container{
+    padding: 0 !important;
 }

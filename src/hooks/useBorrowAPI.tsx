@@ -1,11 +1,11 @@
 import { useBorrow } from "./useBorrow"
 import { BorrowFormData, GetApiProp } from "../types"
+import { useAuth } from "./useAuth"
 
 export const useBorrowAPI = () => {
     const { setBorrowData, setCount } = useBorrow()
-
-    const token = localStorage.getItem("token")
-
+    const { token } = useAuth()
+    
     const addBorrower = async (newBorrower: BorrowFormData) => {
         const { return_date, borrow_date } = newBorrower
 

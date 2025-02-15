@@ -1,10 +1,11 @@
 import { AuthorForm } from "../types";
 import { useAuthor } from "./useAuthor";
 import { GetApiProp } from "../types";
+import { useAuth } from "./useAuth";
 
 export const useAuthorAPI = () => {
     const { setAuthorData, setCount } = useAuthor()
-    const token = localStorage.getItem("token")
+    const { token } = useAuth()
     
     const addAuthor = async (newAuthor: AuthorForm) => {
         try {
