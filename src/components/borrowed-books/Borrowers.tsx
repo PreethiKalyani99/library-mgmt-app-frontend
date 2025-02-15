@@ -9,7 +9,6 @@ import { roles } from "../../constants/roles";
 import { borrowBookColumns } from "../../constants/tableColumns";
 import CreateBorrowedBook from "./CreateBorrowedBook";
 import Actions from "../actions/Actions";
-import styles from "./Borrowers.module.css"
 
 interface BorrowersProp {
     userId?: number | undefined
@@ -102,9 +101,9 @@ export default function Borrowers({ userId }: BorrowersProp) {
     }
 
     return (
-        <div className={styles.author_container}>
-            <div className={styles.search_container}>
-                <div className={styles.search_wrapper}>
+        <div className='content-container'>
+            <div className='search-container'>
+                <div className='search-wrapper'>
                     <Search
                         value={query}
                         onChange={handleChange}
@@ -117,7 +116,7 @@ export default function Borrowers({ userId }: BorrowersProp) {
                     (role === roles.ADMIN || role === roles.LIBRARIAN)
                     &&
                     <button
-                        className={styles.add_btn}
+                        className='add-btn'
                         onClick={toggleModal}
                     >
                         + Add Borrower
@@ -125,7 +124,7 @@ export default function Borrowers({ userId }: BorrowersProp) {
                 }
             </div>
 
-            <div className={styles.table_container}>
+            <div className='table-container'>
                 <Table
                     columnData={borrowBookColumns}
                     rowData={rowData}

@@ -1,10 +1,6 @@
 import { ReactNode } from "react"
+import { useAuth } from "../../../hooks/useAuth"
 import styles from "./Table.module.css"
-import { jwtDecode } from "jwt-decode"
-
-interface JwtPayload {
-    role: string
-}
 
 interface ColumnProp {
     id: number
@@ -29,13 +25,7 @@ interface TableProp {
 }
 
 export function Table({ columnData, rowData }: TableProp){
-    const token = localStorage.getItem("token") || ''
-    let role = ''
-    if(token){
-        const userRole = jwtDecode(token) as JwtPayload
-        role = userRole.role
-    }
-
+    const { role } = useAuth()
     return (
         <table className={styles.table_container}>
             <TableHeader 

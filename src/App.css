@@ -1,6 +1,10 @@
 :root {
     --button-color: #333;
     --background: #ddd;
+    --color: white;
+    --hover-color: black;
+    --hover: #ddd;
+    --weight: 500
 }
 
 .form-control.is-invalid {
@@ -27,3 +31,51 @@
 .col-container{
     padding: 0 !important;
 }
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    row-gap: 40px;
+    margin-top: 40px;
+}
+
+.search-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.add-btn{
+    color: var(--color);
+    background-color: var(--button-color);
+    margin-left: 10px;
+    border: none;
+
+}
+
+@media (min-width: 800px) { /* Large screen */
+    .content-container{
+        padding: 20px;
+    }
+    
+    .search-wrapper{
+        width: 50%;
+    }
+
+    .add-btn{
+        padding: 10px;
+    }
+} 
+
+@media (max-width: 799px) { /* Large screen */
+    .search-wrapper{
+        width: 100%;
+    }
+
+    .add-btn{
+        padding: 5px;
+    }
+} 

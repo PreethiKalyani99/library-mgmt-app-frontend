@@ -10,7 +10,6 @@ import { Search } from "../common/search/Search";
 import CreateUser from "./CreateUser";
 import CreateRole from "./CreateRole";
 import Actions from "../actions/Actions";
-import styles from "./Users.module.css"
 
 interface RoleProp {
     role_id: number
@@ -106,9 +105,9 @@ export default function Users() {
     }
 
     return (
-        <div className={styles.author_container}>
-            <div className={styles.search_container}>
-                <div className={styles.search_wrapper}>
+        <div className='content-container'>
+            <div className='search-container'>
+                <div className='search-wrapper'>
                     <Search
                         value={query}
                         onChange={handleChange}
@@ -122,13 +121,13 @@ export default function Users() {
                         && 
                         <div>
                             <button 
-                                className={styles.add_btn}
+                                className='add-btn'
                                 onClick={toggleRoleModal}
                             >
                                 + Add Role
                             </button>
                             <button 
-                                className={styles.add_btn}
+                                className='add-btn'
                                 onClick={toggleModal}
                             >
                                 + Add User
@@ -137,7 +136,7 @@ export default function Users() {
                     }
             </div>
 
-            <div className={styles.table_container}>
+            <div className='table-container'>
                 <Table
                     columnData={userColumn}
                     rowData={rowData}

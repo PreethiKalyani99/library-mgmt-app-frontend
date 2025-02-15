@@ -1,3 +1,5 @@
+import styles from "./Action.module.css"
+
 interface ActionsProp {
     onEdit?: () => void
     onDelete?: () => void
@@ -5,9 +7,9 @@ interface ActionsProp {
 
 export default function Actions({ onEdit, onDelete }: ActionsProp) {
     return (
-        <div>
-            {onEdit && <button onClick={onEdit}>Edit</button>}
-            {onDelete && <button onClick={onDelete}>Delete</button>}
+        <div className={styles.action_container}>
+            {onEdit && <button onClick={onEdit} className={styles.button}>Edit</button>}
+            {onDelete && <button onClick={onDelete} className={styles.button}>Delete</button>}
         </div>
     )
 }

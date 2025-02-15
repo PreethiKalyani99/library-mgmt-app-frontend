@@ -9,7 +9,6 @@ import { roles } from "../../constants/roles";
 import { bookColumns } from "../../constants/tableColumns";
 import CreateBook from "./CreateBook";
 import Actions from "../actions/Actions";
-import styles from "./Books.module.css"
 
 export default function Books() {
     const [showModal, setShowModal] = useState(false)
@@ -88,9 +87,9 @@ export default function Books() {
     }
 
     return (
-        <div className={styles.author_container}>
-            <div className={styles.search_container}>
-                <div className={styles.search_wrapper}>
+        <div className='content-container'>
+            <div className='search-container'>
+                <div className='search-wrapper'>
                     <Search
                         value={query}
                         onChange={handleChange}
@@ -103,7 +102,7 @@ export default function Books() {
                     (role === roles.ADMIN || role === roles.LIBRARIAN)
                     &&
                     <button
-                        className={styles.add_btn}
+                        className='add-btn'
                         onClick={toggleModal}
                     >
                         + Add Book
@@ -111,7 +110,7 @@ export default function Books() {
                 }
             </div>
 
-            <div className={styles.table_container}>
+            <div className='table-container'>
                 <Table
                     columnData={bookColumns}
                     rowData={rowData}

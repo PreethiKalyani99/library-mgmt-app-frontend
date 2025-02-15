@@ -21,6 +21,7 @@ interface SidebarProp {
 
 export default function Sidebar({ showSidebar }: SidebarProp){
     const { role } = useAuth()
+    const { activeTab } = useUser()
 
     return (
         <div className={showSidebar ? styles.wrapper_mob : styles.wrapper}>
@@ -28,7 +29,7 @@ export default function Sidebar({ showSidebar }: SidebarProp){
                 {nav.map(item => (
                     item.roles.includes(role) ?
                     (
-                        <div key={item.name} className={styles.sidebar_item}>
+                        <div key={item.name} className={`${styles.sidebar_item} ${activeTab === item.tab ? styles.active : ''}`}>
                             <NavItem item={item} />
                         </div>
                     )

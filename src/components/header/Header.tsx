@@ -13,7 +13,7 @@ const Header = ({ onClick }: HeaderProp) => {
             <h1>Welcome!</h1>
             <div>
                 <button className={styles.menu_btn} onClick={onClick}>button</button>
-                <button onClick={logOut}>Logout</button>
+                <button onClick={logOut} className={styles.logout_btn}>Logout</button>
             </div>
         </div>
     )

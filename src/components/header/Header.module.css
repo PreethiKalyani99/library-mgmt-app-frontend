@@ -8,6 +8,14 @@
     width: 100%;
 }
 
+.logout_btn{
+    color: var(--color);
+    background-color: var(--button-color);
+    border: none;
+    padding: 10px;
+    font-weight: var(--weight);
+}
+
 @media (min-width: 800px) { /* Large screen */
     .menu_btn{
         display: none;

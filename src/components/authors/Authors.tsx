@@ -9,7 +9,6 @@ import { useAuth } from "../../hooks/useAuth";
 import { authorColumns } from "../../constants/tableColumns";
 import CreateAuthor from "./CreateAuthor";
 import Actions from "../actions/Actions";
-import styles from "./Authors.module.css"
 
 export default function Authors() {
     const [showModal, setShowModal] = useState(false)
@@ -85,22 +84,22 @@ export default function Authors() {
     }
 
     return (
-        <div className={styles.author_container}>
-            <div className={styles.search_container}>
-                <div className={styles.search_wrapper}>
+        <div className='content-container'>
+            <div className='search-container'>
+                <div className='search-wrapper'>
                     <Search
                         value={query}
                         onChange={handleChange}
                         onSearch={handleSearch}
                         onkeydown={onKeyDown}
                         placeholder="Search by Name or Country..."
-                        />
+                    />
                 </div>
                     {
                         (role === roles.ADMIN || role === roles.LIBRARIAN) 
                         && 
                         <button 
-                            className={styles.add_btn}
+                            className='add-btn'
                             onClick={toggleModal}
                         >
                             + Add Author
@@ -108,7 +107,7 @@ export default function Authors() {
                     }
             </div>
 
-            <div className={styles.table_container}>
+            <div className='table-container'>
                 <Table
                     columnData={authorColumns}
                     rowData={rowData}

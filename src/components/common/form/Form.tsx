@@ -23,7 +23,7 @@ export const CustomForm: React.FC<CustomFormProps> = ({ fields, onChange, onSubm
             />
             <Button
                 type="submit"
-                variant="primary"
+                className={styles.submit_btn}
                 disabled={isLoading}
             >
                 {buttonText}

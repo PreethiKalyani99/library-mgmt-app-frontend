@@ -74,7 +74,7 @@ export default function Main(){
                         showSidebar={showSidebar}
                     />
                 </Col>
-                <Col md={8} lg={10} className="content-container">
+                <Col md={8} lg={10}>
                     {activeTab === '' && <Dashboard/>}
                     {activeTab === 'authors' && <Authors/>}
                     {activeTab === 'books' && <Books/>}

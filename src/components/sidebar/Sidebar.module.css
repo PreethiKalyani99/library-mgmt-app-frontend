@@ -9,9 +9,14 @@
 }
 
 .sidebar_item:hover {
-    background-color: var(--button-color);
-    color: white;
+    background-color: var(--hover);
+    color: var(--hover-color);
     cursor: pointer;
+}
+
+.active {
+    background-color: var(--button-color);
+    color: var(--color);
 }
 
 @media (min-width: 800px) { /* Large screen */

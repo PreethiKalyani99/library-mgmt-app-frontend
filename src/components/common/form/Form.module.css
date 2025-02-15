@@ -1,3 +1,13 @@
 .form_label{
     font-weight: 500;
 }
+
+.submit_btn{
+    color: var(--color) !important;
+    background-color: var(--button-color) !important;
+    border: none !important;
+}
+
+.submit_btn:hover{
+    background-color: var(--hover) !important;
+}
