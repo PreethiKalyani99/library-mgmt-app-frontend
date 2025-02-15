@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { CustomForm } from '../common/form/Form';
 import { ModalLayout } from '../common/modal/Modal';
@@ -65,12 +65,15 @@ const Login: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setIsLoading(true)
-
+        
         if (Object.keys(formValidationErrors).length > 0) {
-            setErrors(prev => ({ ...prev, ...formValidationErrors }))
+            setErrors({
+                email: formValidationErrors.email || '',
+                password: formValidationErrors.password || ''
+            })
             return
         }
+        setIsLoading(true)
         try {
             await loginUser(formData)
             setFormData({ email: '', password: '' })
@@ -90,13 +93,16 @@ const Login: React.FC = () => {
             <ModalLayout
                 title="Login"
                 body={
-                    <CustomForm
-                        fields={formFields}
-                        onChange={handleInputChange}
-                        onSubmit={handleSubmit}
-                        buttonText='Login'
-                        isLoading={isLoading}
-                    />
+                    <>
+                        <CustomForm
+                            fields={formFields}
+                            onChange={handleInputChange}
+                            onSubmit={handleSubmit}
+                            buttonText='Login'
+                            isLoading={isLoading}
+                        />
+                        <p className='text-form'>Dont have an account <Link to='/signup'>Signup</Link></p>
+                    </>
                 }
             />
         </>

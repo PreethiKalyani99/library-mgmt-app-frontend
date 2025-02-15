@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { CustomForm } from '../common/form/Form';
 import { ModalLayout } from '../common/modal/Modal';
 import { commonFields } from '../../constants/formFields';
@@ -53,7 +54,10 @@ const Signup: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (Object.keys(formValidationErrors).length > 0) {
-            setErrors(prev => ({ ...prev, ...formValidationErrors }))
+            setErrors({
+                email: formValidationErrors.email || '',
+                password: formValidationErrors.password || ''
+            })
             return
         }
 
@@ -71,12 +75,15 @@ const Signup: React.FC = () => {
             <ModalLayout
                 title='Signup'
                 body={
-                    <CustomForm
-                        fields={formFields}
-                        onChange={handleInputChange}
-                        onSubmit={handleSubmit}
-                        buttonText='Signup'
-                    />
+                    <>
+                        <CustomForm
+                            fields={formFields}
+                            onChange={handleInputChange}
+                            onSubmit={handleSubmit}
+                            buttonText='Signup'
+                        />
+                        <p className='text-form'>Already have an account <Link to='/'>Login</Link></p>
+                    </>
                 }
             />
         </>

@@ -29,6 +29,14 @@ interface BorrowContextProps {
     setBookOptions: (value: React.SetStateAction<BookData[]>) => void
     userOptions: UserForm[]
     setUserOptions: (value: React.SetStateAction<UserForm[]>) => void
+    showModal: boolean
+    setShowModal: (visible: boolean) => void
+    isEdit: boolean
+    setIsEdit: (visible: boolean) => void 
+    rowId: number
+    setRowId: (value: number) => void
+    isLoading: boolean
+    setIsLoading: (val: boolean) => void
 }
 
 export const BorrowContext = createContext<BorrowContextProps>({
@@ -62,9 +70,21 @@ export const BorrowContext = createContext<BorrowContextProps>({
     setBookOptions: () => null,
     userOptions: [],
     setUserOptions: () => null,
+    isEdit: false,
+    setIsEdit: () => null,
+    showModal: false,
+    setShowModal: () => null,
+    rowId: 0,
+    setRowId: () => null,
+    isLoading: false,
+    setIsLoading: () => null
 })
 
 export const BorrowProvider = ({children}: ProviderProp) => {
+    const [isLoading, setIsLoading] = useState(false)
+    const [showModal, setShowModal] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+    const [rowId, setRowId] = useState(0)
     const [borrowData, setBorrowData] = useState<BorrowDataProp[]>([])
     const [bookOptions, setBookOptions] = useState<BookData[]>([])
     const [userOptions, setUserOptions] = useState<UserForm[]>([])
@@ -115,6 +135,14 @@ export const BorrowProvider = ({children}: ProviderProp) => {
            setUserOptions,
            errors,
            setErrors,
+           showModal,
+           setShowModal,
+           isEdit,
+           setIsEdit,
+           rowId,
+           setRowId,
+           isLoading,
+           setIsLoading
         }
     }, [
         formData,
@@ -127,6 +155,10 @@ export const BorrowProvider = ({children}: ProviderProp) => {
         bookOptions,
         userOptions,
         errors,
+        showModal,
+        isEdit,
+        rowId,
+        isLoading
     ])
 
     return <BorrowContext.Provider value={value}>{children}</BorrowContext.Provider>

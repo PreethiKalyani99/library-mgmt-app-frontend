@@ -1,154 +1,34 @@
-import { useState, useCallback } from 'react';
-import { debounce } from "lodash"
 import { CustomForm } from '../common/form/Form';
 import { ModalLayout } from '../common/modal/Modal';
-import { Alert } from '../common/alert/Alert';
 import { Loader } from '../common/loader/Loader';
 import { bookFields } from '../../constants/formFields';
 import { useBook } from '../../hooks/useBook';
 import { useAuthor } from '../../hooks/useAuthor';
-import { useBookAPI } from '../../hooks/useBookAPI';
-import { useAuthorAPI } from '../../hooks/useAuthorAPI';
-import { bookFormValidation } from '../../utils/validation';
+import { useBookHandlers } from '../../hooks/useBookHandlers';
 
-interface CreateBookProp {
-    setShowModal: (value: boolean) => void
-    isEdit: boolean
-    rowId: number
-    setIsEdit: (value: boolean) => void
-}
-
-const CreateBook: React.FC<CreateBookProp> = ({ setShowModal, isEdit, rowId, setIsEdit }) => {
-    const [isLoading, setIsLoading] = useState(false)
-    const [alertProps, setAlertProps] = useState({
-        type: 'success',
-        message: 'Book created successfully'
-    })
-
+const CreateBook: React.FC = () => {
     const {
         formData,
-        setFormData,
-        isAlertVisible,
-        setIsAlertVisible, 
         errors,
-        setErrors,
+        isLoading,
+        isEdit
     } = useBook()
+
+    const { 
+        handleOptionChange,
+        handleFormSearch,
+        handleClose,
+        handleInputChange,
+        handleSubmit
+    } = useBookHandlers()
     
-    const { options, setOptions } = useAuthor()
+    const { options } = useAuthor()
 
-    const { addBook, updateBook } = useBookAPI()
-    const { getAuthor } = useAuthorAPI()
+    const formFields = bookFields({ formData, options, onOptionChange: handleOptionChange, onInputChange: handleFormSearch, errors })
 
-    const handleSearch = (option: string) => {
-        setFormData({...formData, authorName: option}) 
-        if(option.length >= 3 && /^[a-zA-Z]+$/.test(option)){
-            debouncedSave(option)
-            return
-        }
-    }
-
-    const handleOptionChange = (selected: any) => {
-        setFormData({...formData, authorName: selected[0] || ''})
-    }
-
-    const debouncedSave = useCallback(
-        debounce(async (newValue: string) => {
-            const result = await getAuthor({ search: newValue })
-            const authorNames = result.data.map((author: any) => author.name)
-            setOptions([...authorNames])
-        }, 1000),
-    [])
-
-    const formFields = bookFields({ formData, options, onOptionChange: handleOptionChange, onInputChange: handleSearch, errors })
-
-    const formValidationErrors = bookFormValidation(formData)
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setFormData({ ...formData, [name]: value })
-    }
-
-    const handleEdit = async () => {
-        const updateProp = {
-            id: rowId,
-            title: formData.title,
-            published_year: formData.publishedYear || '',
-            author:{
-                name: formData.authorName
-            }
-        }
-        await updateBook(updateProp)
-        setIsEdit(false)
-    }
-
-    const handleAdd = async () => {
-        const newBook = {
-            title: formData.title,
-            published_year: formData.publishedYear || '',
-            author: {
-                name: formData.authorName
-            } 
-        }
-        await addBook(newBook)
-    }
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        try {
-            setIsLoading(true)
-            if (Object.keys(formValidationErrors).length > 0) {
-                setErrors({ 
-                    authorName: formValidationErrors.authorName || '', 
-                    title: formValidationErrors.title || '', 
-                    publishedYear: formValidationErrors.publishedYear || '' 
-                })
-                return
-            }
-
-            if(isEdit){
-                await handleEdit() 
-            }
-            else{
-                await handleAdd()
-            }
-            setShowModal(false)
-            if(formData.authorName){
-                setFormData({ authorName: '', title: '', publishedYear: '' })
-            }
-            setAlertProps({ type: 'success', message: 'Book created successfully' })
-        }
-        catch (error) {
-            setAlertProps({ type: 'error', message: 'Failed to create Book' })
-        }
-        finally {
-            setIsLoading(false)
-            setIsAlertVisible(true)
-        }
-    }
-
-    const handleClose = () => {
-        if(formData.authorName){
-            setIsEdit(false)
-            setFormData({authorName: '', title: '', publishedYear: ''})
-        }
-        setErrors({ 
-            authorName: '', 
-            title: '', 
-            publishedYear: '' 
-        })
-        setShowModal(false)
-    }
-    
     return (
         <>
             {isLoading && <Loader />}
-            {isAlertVisible &&
-                <Alert
-                    type={alertProps.type}
-                    message={alertProps.message}
-                    onClose={() => setIsAlertVisible(false)}
-                />
-            }
             <ModalLayout
                 height={70}
                 title="Book Info"

@@ -24,19 +24,17 @@ export default function Sidebar({ showSidebar }: SidebarProp){
     const { activeTab } = useUser()
 
     return (
-        <div className={showSidebar ? styles.wrapper_mob : styles.wrapper}>
-            <div className={showSidebar ? styles.sidebar_container_mob : styles.sidebar_container}>
-                {nav.map(item => (
-                    item.roles.includes(role) ?
-                    (
-                        <div key={item.name} className={`${styles.sidebar_item} ${activeTab === item.tab ? styles.active : ''}`}>
-                            <NavItem item={item} />
-                        </div>
-                    )
-                    :
-                    null
-                ))}
-            </div>
+        <div className={showSidebar ? styles.sidebar_container_mob : styles.sidebar_container}>
+            {nav.map(item => (
+                item.roles.includes(role) ?
+                (
+                    <div key={item.name} className={`${styles.sidebar_item} ${activeTab === item.tab ? styles.active : ''}`}>
+                        <NavItem item={item} />
+                    </div>
+                )
+                :
+                null
+            ))}
         </div>
     )
 }

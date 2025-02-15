@@ -22,6 +22,16 @@ interface UserProviderProp {
     setIsAlertVisible: (visible: boolean) => void
     roleData: string[]
     setRoleData: (value: string[]) => void
+    showModal: boolean
+    setShowModal: (visible: boolean) => void
+    isEdit: boolean
+    setIsEdit: (visible: boolean) => void
+    rowId: number
+    setRowId: (value: number) => void
+    isLoading: boolean
+    setIsLoading: (val: boolean) => void
+    showRole: boolean
+    setShowRole: (val: boolean) => void
 }
 
 export const UserContext = createContext<UserProviderProp>({
@@ -44,10 +54,25 @@ export const UserContext = createContext<UserProviderProp>({
     isAlertVisible: false,
     setIsAlertVisible: () => null,
     roleData: [],
-    setRoleData: () => null
+    setRoleData: () => null,
+    isEdit: false,
+    setIsEdit: () => null,
+    showModal: false,
+    setShowModal: () => null,
+    rowId: 0,
+    setRowId: () => null,
+    isLoading: false,
+    setIsLoading: () => null,
+    showRole: false,
+    setShowRole: () => null,
 })
 
 export const UserProvider = ({ children }: ProviderProp) => {
+    const [showRole, setShowRole] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [showModal, setShowModal] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+    const [rowId, setRowId] = useState(0)
     const [activeTab, setActiveTab] = useState('')
     const [roleData, setRoleData] = useState<string[]>([])
     const [userData, setUserData] = useState<UserForm[]>([])
@@ -85,6 +110,16 @@ export const UserProvider = ({ children }: ProviderProp) => {
             setRoleData,
             errors,
             setErrors,
+            showModal,
+           setShowModal,
+           isEdit,
+           setIsEdit,
+           rowId,
+           setRowId,
+           isLoading,
+           setIsLoading,
+           showRole,
+           setShowRole
         }
     }, [
         activeTab,
@@ -96,7 +131,12 @@ export const UserProvider = ({ children }: ProviderProp) => {
         formData,
         isAlertVisible,
         roleData,
+        showRole,
         errors,
+        showModal,
+        isEdit,
+        rowId,
+        isLoading
     ])
     
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>

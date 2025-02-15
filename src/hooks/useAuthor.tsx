@@ -10,6 +10,14 @@ interface AuthorContextProps {
     setAuthorData: (value: React.SetStateAction<AuthorForm[]>) => void
     isAlertVisible: boolean
     setIsAlertVisible: (visible: boolean) => void
+    isLoading: boolean
+    setIsLoading: (visible: boolean) => void
+    showModal: boolean
+    setShowModal: (visible: boolean) => void
+    isEdit: boolean
+    setIsEdit: (visible: boolean) => void
+    rowId: number
+    setRowId: (value: number) => void
     options: string[]
     setOptions: (value: React.SetStateAction<string[]>) => void
     count: number
@@ -27,12 +35,20 @@ export const AuthorContext = createContext<AuthorContextProps>({
     setFormData: () => {},
     isAlertVisible: false,
     setIsAlertVisible: () => null,
+    isLoading: false,
+    setIsLoading: () => null,
     authorData: [],
     setAuthorData: () => {},
     options: [],
     setOptions: () => null,
     count: 0,
     setCount: () => null,
+    isEdit: false,
+    setIsEdit: () => null,
+    showModal: false,
+    setShowModal: () => null,
+    rowId: 0,
+    setRowId: () => null,
     currentPage: 1,
     setCurrentPage: () => null,
     rowsPerPage: 10,
@@ -44,12 +60,16 @@ export const AuthorContext = createContext<AuthorContextProps>({
 })
 
 export const AuthorProvider = ({children}: ProviderProp) => {
+    const [isLoading, setIsLoading] = useState(false)
     const [isAlertVisible, setIsAlertVisible] = useState(false)
     const [authorData, setAuthorData] = useState<AuthorForm[]>([])
     const [count, setCount] = useState(0)
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [options, setOptions] = useState<string[]>([])
+    const [showModal, setShowModal] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+    const [rowId, setRowId] = useState(0)
     const [query, setQuery] = useState('')
     const [formData, setFormData] = useState<AuthorForm>({
         name: '',
@@ -87,6 +107,14 @@ export const AuthorProvider = ({children}: ProviderProp) => {
            setQuery,
            errors,
            setErrors,
+           showModal,
+           setShowModal,
+           isEdit,
+           setIsEdit,
+           rowId,
+           setRowId,
+           isLoading,
+           setIsLoading
         }
     }, [
         formData,
@@ -97,7 +125,11 @@ export const AuthorProvider = ({children}: ProviderProp) => {
         currentPage,
         rowsPerPage,
         query,
-        errors
+        errors,
+        showModal,
+        isEdit,
+        rowId,
+        isLoading
     ])
 
     return <AuthorContext.Provider value={value}>{children}</AuthorContext.Provider>

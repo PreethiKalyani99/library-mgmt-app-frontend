@@ -1,17 +1,16 @@
 import { useState } from "react";
+import { useUser } from "../../hooks/useUser";
 import { useUserAPI } from "../../hooks/useUserAPI";
 import { roleField } from "../../constants/formFields";
 import { ModalLayout } from "../common/modal/Modal";
 import { CustomForm } from "../common/form/Form";
 
-interface CreateRoleProp {
-    setShowRole: (value: boolean) => void
-}
-
-export default function CreateRole({ setShowRole }: CreateRoleProp) {
+export default function CreateRole() {
     const [isLoading, setIsLoading] = useState(false)
     const [formData, setFormData] = useState('')
     const [error, setError] = useState('')
+
+    const { setShowRole } = useUser()
 
     const formField = roleField({ formData, error })
 

@@ -24,6 +24,14 @@ interface BookContextProps {
     setRowsPerPage: (page: number) => void
     query: string
     setQuery: (str: string) => void
+    showModal: boolean
+    setShowModal: (visible: boolean) => void
+    isEdit: boolean
+    setIsEdit: (visible: boolean) => void
+    rowId: number
+    setRowId: (value: number) => void
+    isLoading: boolean
+    setIsLoading: (val: boolean) => void
 }
 
 export const BookContext = createContext<BookContextProps>({
@@ -43,16 +51,28 @@ export const BookContext = createContext<BookContextProps>({
     setRowsPerPage: () => null,
     query: '',
     setQuery: () => null,
+    isEdit: false,
+    setIsEdit: () => null,
+    showModal: false,
+    setShowModal: () => null,
+    rowId: 0,
+    setRowId: () => null,
+    isLoading: false,
+    setIsLoading: () => null
 })
 
 export const BookProvider = ({children}: ProviderProp) => {
+    const [isLoading, setIsLoading] = useState(false)
+    const [showModal, setShowModal] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+    const [rowId, setRowId] = useState(0)
     const [bookData, setBookData] = useState<BookForm[]>([])
     const [isAlertVisible, setIsAlertVisible] = useState(false)
     const [count, setCount] = useState(0)
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [query, setQuery] = useState('')
-    const [formData, setFormData] = useState<FormProp>({
+    const [formData, setFormData] = useState<FormProp>({ 
        authorName: '', 
        title: '', 
        publishedYear: ''
@@ -88,6 +108,14 @@ export const BookProvider = ({children}: ProviderProp) => {
            setQuery,
            errors,
            setErrors,
+           showModal,
+           setShowModal,
+           isEdit,
+           setIsEdit,
+           rowId,
+           setRowId,
+           isLoading,
+           setIsLoading
         }
     }, [
         formData,
@@ -97,7 +125,11 @@ export const BookProvider = ({children}: ProviderProp) => {
         currentPage,
         rowsPerPage, 
         query,
-        errors
+        errors,
+        showModal,
+        isEdit,
+        rowId,
+        isLoading
     ])
 
     return <BookContext.Provider value={value}>{children}</BookContext.Provider>

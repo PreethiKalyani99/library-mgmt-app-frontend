@@ -73,16 +73,16 @@ interface CommonFormProp {
     password: string
     role?: string
 }
-export const commonFormValidation = (formData: CommonFormProp, type: string) => {
+export const commonFormValidation = (formData: CommonFormProp, type: string, isEdit: boolean = false) => {
     let errors: Partial<CommonFormProp> = {}
 
     if(formData.email?.trim() === ''){
         errors.email = "Email is required"
     }
-    if(formData.password?.trim() === ''){
+    if(!isEdit && formData.password?.trim() === ''){
         errors.password = "Password is required"
     }
-    if((type === 'signup' || type === 'user') && formData.password.length < 8){
+    if((type === 'signup' || (type === 'user' && !isEdit)) && formData.password.length < 8){
         errors.password = "Password should be at least 8 characters long"
     }
     if((type === 'signup' || type === 'user') && !isEmailValid(formData.email)){

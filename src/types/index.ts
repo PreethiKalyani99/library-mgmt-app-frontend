@@ -62,7 +62,7 @@ export type Field = {
     name: string
     type?: string
     placeholder: string
-    value?: string
+    value: string
     error?: string
     as?: string
     children?: ReactNode
