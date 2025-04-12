@@ -8,7 +8,7 @@ export const useUserAPI = () => {
 
     const addUser = async (newUser: UserFormProp) => {
         try {
-            const response = await fetch("https://library-mgmt-us4m.onrender.com/users", {
+            const response = await fetch(`${process.env.BASE_URL}/users`, {
                 method: "POST",
                 headers: {
                     "authorization": token || '',
@@ -30,7 +30,7 @@ export const useUserAPI = () => {
 
     const getUser = async ({ search, pageNumber = 1, pageSize = 10 }: GetApiProp) => {
         try {
-            const response = await fetch(`https://library-mgmt-us4m.onrender.com/users?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}` : ''}`, {
+            const response = await fetch(`${process.env.BASE_URL}/users?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}` : ''}`, {
                 method: "GET",
                 headers: {
                     "authorization": token || '',
@@ -60,7 +60,7 @@ export const useUserAPI = () => {
 
     const updateUser = async ({ role, id } : RoleProp) => {
         try {
-            const response = await fetch(`https://library-mgmt-us4m.onrender.com/users/${id}`, {
+            const response = await fetch(`${process.env.BASE_URL}/users/${id}`, {
                 method: "PUT",
                 headers: {
                     "authorization": token || '',
@@ -82,7 +82,7 @@ export const useUserAPI = () => {
 
     const createRole = async (role: string) => {
         try {
-            const response = await fetch("https://library-mgmt-us4m.onrender.com/roles", {
+            const response = await fetch(`${process.env.BASE_URL}/roles`, {
                 method: "POST",
                 headers: {
                     "authorization": token || '',
@@ -104,7 +104,7 @@ export const useUserAPI = () => {
 
     const getRoles = async () => {
         try {
-            const response = await fetch("https://library-mgmt-us4m.onrender.com/roles", {
+            const response = await fetch(`${process.env.BASE_URL}/roles`, {
                 method: "GET",
                 headers: {
                     "authorization": token || '',

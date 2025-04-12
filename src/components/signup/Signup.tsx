@@ -22,7 +22,7 @@ const Signup: React.FC = () => {
 
     const CreateUser = async (user: CreateUserProp) => {
         try {
-            const response = await fetch("https://library-mgmt-us4m.onrender.com/users/sign-up", {
+            const response = await fetch(`${process.env.BASE_URL}/users/sign-up`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

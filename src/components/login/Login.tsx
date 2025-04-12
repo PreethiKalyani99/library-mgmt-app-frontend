@@ -33,7 +33,7 @@ const Login: React.FC = () => {
 
     const loginUser = async (user: LoginUser) => {
         try {
-            const response = await fetch("https://library-mgmt-us4m.onrender.com/users/login", {
+            const response = await fetch(`${process.env.BASE_URL}/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

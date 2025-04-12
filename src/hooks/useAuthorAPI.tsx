@@ -9,7 +9,7 @@ export const useAuthorAPI = () => {
     
     const addAuthor = async (newAuthor: AuthorForm) => {
         try {
-            const response = await fetch("https://library-mgmt-us4m.onrender.com/authors", {
+            const response = await fetch(`${process.env.BASE_URL}/authors`, {
                 method: "POST",
                 headers: {
                     "authorization": token || '', 
@@ -31,7 +31,7 @@ export const useAuthorAPI = () => {
 
     const getAuthor = async ({ search, pageNumber = 1, pageSize = 10}: GetApiProp) => {
         try {
-            const response = await fetch(`https://library-mgmt-us4m.onrender.com/authors?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}`: ''}`, {
+            const response = await fetch(`${process.env.BASE_URL}/authors?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}`: ''}`, {
                 method: "GET",
                 headers: {
                     "authorization": token || '',
@@ -65,7 +65,7 @@ export const useAuthorAPI = () => {
     const updateAuthor = async (authorProp: UpdateAuthor) => {
         const { id, author } = authorProp
         try {
-            const response = await fetch(`https://library-mgmt-us4m.onrender.com/authors/${id}`, {
+            const response = await fetch(`${process.env.BASE_URL}/authors/${id}`, {
                 method: "PUT",
                 headers: {
                     "authorization": token || '',
@@ -87,7 +87,7 @@ export const useAuthorAPI = () => {
 
     const deleteAuthor = async (id: number) => {
         try {
-            const response = await fetch(`https://library-mgmt-us4m.onrender.com/authors/${id}`, {
+            const response = await fetch(`${process.env.BASE_URL}/authors/${id}`, {
                 method: "DELETE",
                 headers: {
                     "authorization": token || '',
