@@ -14,7 +14,7 @@ export const useBorrowAPI = () => {
                 throw new Error("Borrow date should be earlier than return date")
             }
 
-            const response = await fetch(`${process.env.BASE_URL}/borrow`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/borrow`, {
                 method: "POST",
                 headers: {
                     "authorization": token || '',
@@ -36,7 +36,7 @@ export const useBorrowAPI = () => {
 
     const getBorrower = async ({ search, pageNumber = 1, pageSize = 10 }: GetApiProp) => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/borrow?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}` : ''}`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/borrow?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}` : ''}`, {
                 method: "GET",
                 headers: {
                     "authorization": token || '',
@@ -65,7 +65,7 @@ export const useBorrowAPI = () => {
 
     const getBorrowerById = async ({ id, search, pageNumber = 1, pageSize = 10 }: BorrowerByIdProp) => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/borrow/${id}?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}` : ''}`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/borrow/${id}?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}` : ''}`, {
                 method: "GET",
                 headers: {
                     "authorization": token || '',
@@ -100,7 +100,7 @@ export const useBorrowAPI = () => {
             if(new Date(borrow_date) >= new Date(return_date)){
                 throw new Error("Borrow date should be earlier than return date")
             }
-            const response = await fetch(`${process.env.BASE_URL}/borrow/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/borrow/${id}`, {
                 method: "PUT",
                 headers: {
                     "authorization": token || '',

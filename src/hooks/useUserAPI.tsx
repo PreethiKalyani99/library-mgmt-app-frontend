@@ -3,12 +3,12 @@ import { UserFormProp, GetApiProp } from "../types"
 import { useAuth } from "./useAuth"
 
 export const useUserAPI = () => {
-    const { setUserData, setCount } = useUser()
+    const { setUserData, setCount, setRoleData, roleData } = useUser()
     const { token } = useAuth()
 
     const addUser = async (newUser: UserFormProp) => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/users`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/users`, {
                 method: "POST",
                 headers: {
                     "authorization": token || '',
@@ -30,7 +30,7 @@ export const useUserAPI = () => {
 
     const getUser = async ({ search, pageNumber = 1, pageSize = 10 }: GetApiProp) => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/users?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}` : ''}`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/users?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}` : ''}`, {
                 method: "GET",
                 headers: {
                     "authorization": token || '',
@@ -60,7 +60,7 @@ export const useUserAPI = () => {
 
     const updateUser = async ({ role, id } : RoleProp) => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/users/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/users/${id}`, {
                 method: "PUT",
                 headers: {
                     "authorization": token || '',
@@ -82,7 +82,7 @@ export const useUserAPI = () => {
 
     const createRole = async (role: string) => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/roles`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/roles`, {
                 method: "POST",
                 headers: {
                     "authorization": token || '',
@@ -96,6 +96,7 @@ export const useUserAPI = () => {
             }
 
             const result = await response.json()
+            setRoleData([...roleData, result.role])
         } catch (error) {
             console.log(`Error creating role: ${error}`)
             throw error
@@ -104,7 +105,7 @@ export const useUserAPI = () => {
 
     const getRoles = async () => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/roles`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/roles`, {
                 method: "GET",
                 headers: {
                     "authorization": token || '',

@@ -19,7 +19,7 @@ export const useBookAPI = () => {
 
     const addBook = async (newBook: AddBookProp) => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/books`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/books`, {
                 method: "POST",
                 headers: {
                     "authorization": token,
@@ -42,7 +42,7 @@ export const useBookAPI = () => {
 
     const getBook = async ({ search, pageNumber = 1, pageSize = 10}: GetApiProp) => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/books?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}`: ''}`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/books?page_number=${pageNumber}&page_size=${pageSize}${search ? `&search=${search}`: ''}`, {
                 method: "GET",
                 headers: {
                     "authorization": token || '',
@@ -79,7 +79,7 @@ export const useBookAPI = () => {
     const updateBook = async (bookProp: BookProp) => {
         const { id, ...props } = bookProp
         try {
-            const response = await fetch(`${process.env.BASE_URL}/books/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/books/${id}`, {
                 method: "PUT",
                 headers: {
                     "authorization": token,
@@ -101,7 +101,7 @@ export const useBookAPI = () => {
 
     const deleteBook = async (id: number) => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/books/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/books/${id}`, {
                 method: "DELETE",
                 headers: {
                     "authorization": token,

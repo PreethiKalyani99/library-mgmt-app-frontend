@@ -33,7 +33,7 @@ const Login: React.FC = () => {
 
     const loginUser = async (user: LoginUser) => {
         try {
-            const response = await fetch(`${process.env.BASE_URL}/users/login`, {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
