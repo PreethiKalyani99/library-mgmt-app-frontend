@@ -1,0 +1,13 @@
+.action_container{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.button{
+    border: none;
+    outline: none;
+    background-color: var(--button-color);
+    color: white;
+    padding: 5px 10px;
+}
