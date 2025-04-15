@@ -31,7 +31,6 @@ export type BookForm = {
     title: string
     published_year?: number
     author: AuthorForm
-    users: UserForm
 }
 
 export type UserType = {

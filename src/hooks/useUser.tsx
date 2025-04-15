@@ -32,6 +32,8 @@ interface UserProviderProp {
     setIsLoading: (val: boolean) => void
     showRole: boolean
     setShowRole: (val: boolean) => void
+    userInfo: string
+    setUserInfo: (val: string) => void
 }
 
 export const UserContext = createContext<UserProviderProp>({
@@ -65,6 +67,8 @@ export const UserContext = createContext<UserProviderProp>({
     setIsLoading: () => null,
     showRole: false,
     setShowRole: () => null,
+    userInfo: '',
+    setUserInfo: () => null,
 })
 
 export const UserProvider = ({ children }: ProviderProp) => {
@@ -81,6 +85,7 @@ export const UserProvider = ({ children }: ProviderProp) => {
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const [query, setQuery] = useState('')
     const [isAlertVisible, setIsAlertVisible] = useState(false)
+    const [userInfo, setUserInfo] = useState('')
     const [formData, setFormData] = useState({
         email: '', password: '', role: ''
     })
@@ -119,7 +124,9 @@ export const UserProvider = ({ children }: ProviderProp) => {
            isLoading,
            setIsLoading,
            showRole,
-           setShowRole
+           setShowRole,
+           userInfo,
+           setUserInfo,
         }
     }, [
         activeTab,
@@ -136,7 +143,8 @@ export const UserProvider = ({ children }: ProviderProp) => {
         showModal,
         isEdit,
         rowId,
-        isLoading
+        isLoading,
+        userInfo,
     ])
     
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>

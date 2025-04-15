@@ -51,11 +51,13 @@ export default function Books() {
                 }
             </div>
 
-            <div className='table-container'>
-                <Table
-                    columnData={bookColumns}
-                    rowData={rowData}
-                />
+            <div>
+                <div className={rowsPerPage > 10 ? 'table-container' : ''}>
+                    <Table
+                        columnData={bookColumns}
+                        rowData={rowData}
+                    />
+                </div>
                 <Pagination
                     count={count}
                     currentPage={currentPage}

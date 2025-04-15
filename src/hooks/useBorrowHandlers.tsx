@@ -158,7 +158,6 @@ export const useBorrowHandlers = () => {
     const handleAdd = async () => {
         const newUser = {
             borrow_date: formData.borrowDate,
-            return_date: formData.returnDate || null,
             book: {
                 title: formData.title
             },

@@ -71,10 +71,12 @@ export default function Borrowers({ userId }: BorrowersProp) {
             </div>
 
             <div className='table-container'>
-                <Table
-                    columnData={borrowBookColumns}
-                    rowData={rowData}
-                />
+                <div className={rowsPerPage > 10 ? 'table-container' : ''}>
+                    <Table
+                        columnData={borrowBookColumns}
+                        rowData={rowData}
+                    />
+                </div>
                 <Pagination
                     count={count}
                     currentPage={currentPage}

@@ -42,7 +42,7 @@ export default function CreateRole() {
     return (
         <ModalLayout
             height={70}
-            title="User's Info"
+            title="Create Role"
             close={() => setShowRole(false)}
             body={
                 <CustomForm

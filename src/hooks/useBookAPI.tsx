@@ -14,7 +14,7 @@ interface AddBookProp {
 }
 
 export const useBookAPI = () => {
-    const { setBookData, setCount } = useBook()
+    const { setBookData, setCount, bookData } = useBook()
     const { token } = useAuth()
 
     const addBook = async (newBook: AddBookProp) => {
@@ -32,7 +32,8 @@ export const useBookAPI = () => {
                 throw new Error(`Failed to add book, status: ${response.status}`)
             }
 
-            const result = await response.json()
+            const result: any = await response.json()
+            setBookData([{ book_id: result.book_id, author: result.author, published_year: result.published_year, title: result.title }, ...bookData])
 
         } catch (error) {
             console.log(`Error adding book: ${error}`)
@@ -91,7 +92,14 @@ export const useBookAPI = () => {
             if (!response.ok) {
                 throw new Error(`Failed to update book, status: ${response.status}`)
             }
-            await response.json()
+            const result = await response.json()
+            const updatedData = bookData.map((book) => 
+                book.book_id === id ? 
+                    { ...book, author: result.author, published_year: result.published_year, title: result.title } 
+                    :
+                    book
+            )
+            setBookData(updatedData)
 
         } catch (error) {
             console.log(`Error updating book: ${error}`)
@@ -112,6 +120,8 @@ export const useBookAPI = () => {
             if (!response.ok) {
                 throw new Error(`Failed to delete book, status: ${response.status}`)
             }
+            const updatedData = bookData.filter((book) => book.book_id !== id)
+            setBookData(updatedData)
 
         } catch (error) {
             console.log(`Error deleting book: ${error}`)

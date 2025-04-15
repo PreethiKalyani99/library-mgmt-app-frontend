@@ -4,7 +4,7 @@ import { GetApiProp } from "../types";
 import { useAuth } from "./useAuth";
 
 export const useAuthorAPI = () => {
-    const { setAuthorData, setCount } = useAuthor()
+    const { setAuthorData, setCount, authorData } = useAuthor()
     const { token } = useAuth()
     
     const addAuthor = async (newAuthor: AuthorForm) => {
@@ -22,7 +22,8 @@ export const useAuthorAPI = () => {
                 throw new Error(`Failed to add author, status: ${response.status}`)
             }
 
-            await response.json()
+            const result: AuthorForm = await response.json()
+            setAuthorData([{ name: result.name, country: result.country, author_id: result.author_id}, ...authorData])
         } catch (error) {
             console.log(`Error adding author: ${error}`)
             throw error
@@ -78,7 +79,11 @@ export const useAuthorAPI = () => {
                 throw new Error(`Failed to delete author, status: ${response.status}`)
             }
 
-            await response.json()
+            const result = await response.json()
+            const updatedData = authorData.map((author) => 
+                author.author_id === id ? result : author
+            )
+            setAuthorData(updatedData)
         } catch (error) {
             console.log(`Error deleting author: ${error}`)
             throw error
@@ -98,6 +103,8 @@ export const useAuthorAPI = () => {
             if (!response.ok) {
                 throw new Error(`Failed to delete author, status: ${response.status}`)
             }
+            const updatedData = authorData.filter((author) => author.author_id !== id)
+            setAuthorData(updatedData)
         } catch (error) {
             console.log(`Error deleting author: ${error}`)
             throw error

@@ -7,6 +7,10 @@
     --weight: 500
 }
 
+body {
+   overflow: hidden;
+}
+
 .text-form {
     margin-top: 20px;
 }
@@ -35,11 +39,15 @@
     padding: 0 !important;
 }
 
+.table-container{
+    height: 65vh !important;
+    overflow-y: auto;
+}
+
 .content-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
     row-gap: 40px;
     margin-top: 40px;
 }
@@ -57,6 +65,19 @@
     margin-left: 10px;
     border: none;
 
+}
+
+.disable{
+    cursor: not-allowed;
+    color: gray;
+}
+
+.text-decoration {
+    text-decoration: underline;
+}
+
+.capitalize{
+    text-transform: capitalize;
 }
 
 @media (min-width: 800px) { /* Large screen */

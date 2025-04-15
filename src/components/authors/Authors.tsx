@@ -62,11 +62,13 @@ export default function Authors() {
                     }
             </div>
 
-            <div className='table-container'>
-                <Table
-                    columnData={authorColumns}
-                    rowData={rowData}
-                />
+            <div>
+                <div className={rowsPerPage > 10 ? 'table-container' : ''}>
+                    <Table
+                        columnData={authorColumns}
+                        rowData={rowData}
+                    />
+                </div>
                 <Pagination
                     count={count}
                     currentPage={currentPage}

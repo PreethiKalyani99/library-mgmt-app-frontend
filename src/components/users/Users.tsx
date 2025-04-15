@@ -89,11 +89,14 @@ export default function Users() {
                     }
             </div>
 
-            <div className='table-container'>
-                <Table
-                    columnData={userColumn}
-                    rowData={rowData}
-                />
+            <div>
+                <div className={rowsPerPage > 10 ? 'table-container' : ''}>
+                    <Table
+                        columnData={userColumn}
+                        rowData={rowData}
+                        
+                    />
+                </div>
                 <Pagination
                     count={count}
                     currentPage={currentPage}

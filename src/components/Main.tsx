@@ -11,16 +11,15 @@ import Authors from "./authors/Authors";
 import Books from "./books/Books";
 import Users from "./users/Users";
 import Borrowers from "./borrowed-books/Borrowers";
-import Dashboard from "./dashboard/Dashboard";
 import Cookies from "js-cookie";
 
 interface JwtPayload {
     role: string
-    user_id: number 
+    user_id: number
     exp: number
 }
 
-export default function Main(){
+export default function Main() {
     const [showSidebar, setShowSidebar] = useState(false)
     const [userId, setUserId] = useState(0)
 
@@ -30,12 +29,12 @@ export default function Main(){
     const { activeTab, setActiveTab } = useUser()
     const { setRole, setToken, isExpired } = useAuth()
 
-    const token = Cookies.get('token')
 
     useEffect(() => {
-        try {
-            if (token) {
-                const { role: userRole, user_id: user_ID, exp} = jwtDecode(token) as JwtPayload
+        const token = Cookies.get('token')
+        if (token) {
+            try {
+                const { role: userRole, user_id: user_ID, exp } = jwtDecode(token) as JwtPayload
                 if (isExpired(exp)) {
                     navigate("/")
                 }
@@ -43,16 +42,16 @@ export default function Main(){
                 setRole(userRole || "")
                 setToken(token)
                 setUserId(user_ID)
+            } catch (error) {
+                console.error("Error decoding token", error)
+                navigate("/")
             }
-        } catch (error) {
-            console.error("Error decoding token", error)
-            navigate("/")
         }
-    }, [])
+    }, [navigate])
 
     useEffect(() => {
         const matchPath = nav.find((item: any) => item.path === location.pathname)
-        if(matchPath){
+        if (matchPath) {
             setActiveTab(matchPath.tab)
         }
     }, [location.pathname])
@@ -60,7 +59,7 @@ export default function Main(){
     const handleClick = () => {
         setShowSidebar(!showSidebar)
     }
-    
+
     return (
         <div className="main-container">
             <Row className="row-container">
@@ -74,12 +73,11 @@ export default function Main(){
                         showSidebar={showSidebar}
                     />
                 </Col>
-                <Col md={8} lg={10}>
-                    {activeTab === '' && <Dashboard/>}
-                    {activeTab === 'authors' && <Authors/>}
-                    {activeTab === 'books' && <Books/>}
-                    {activeTab === 'user-management' && <Users/>}
-                    {activeTab === 'borrowed-books' && <Borrowers userId={userId}/>}
+                <Col md={8} lg={10} className="main-page">
+                    {activeTab === 'authors' && <Authors />}
+                    {activeTab === 'books' && <Books />}
+                    {activeTab === 'user-management' && <Users />}
+                    {activeTab === 'borrowed-books' && <Borrowers userId={userId} />}
                 </Col>
             </Row>
         </div>

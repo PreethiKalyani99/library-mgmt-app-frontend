@@ -24,7 +24,6 @@ const Login: React.FC = () => {
     })
 
     const navigate = useNavigate()
-
     const { setToken } = useAuth()
 
     const formFields = commonFields(formData, errors)
@@ -101,7 +100,13 @@ const Login: React.FC = () => {
                             buttonText='Login'
                             isLoading={isLoading}
                         />
-                        <p className='text-form'>Dont have an account <Link to='/signup'>Signup</Link></p>
+                        <p className='text-form'>Dont have an account {' '}
+                            {isLoading ? 
+                                <span className='disable text-decoration'>Signup</span> 
+                                : 
+                                <Link to='/signup'>Signup</Link>
+                            }
+                        </p>
                     </>
                 }
             />

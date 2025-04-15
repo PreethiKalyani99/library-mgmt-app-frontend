@@ -1,9 +1,9 @@
 import { useUser } from "./useUser"
-import { UserFormProp, GetApiProp } from "../types"
+import { UserFormProp, GetApiProp, UserForm } from "../types"
 import { useAuth } from "./useAuth"
 
 export const useUserAPI = () => {
-    const { setUserData, setCount, setRoleData, roleData } = useUser()
+    const { setUserData, setCount, setRoleData, roleData, userData } = useUser()
     const { token } = useAuth()
 
     const addUser = async (newUser: UserFormProp) => {
@@ -22,6 +22,7 @@ export const useUserAPI = () => {
             }
 
             const result = await response.json()
+            setUserData([{user_id: result.user_id, email: result.email, role: result.role}, ...userData])
         } catch (error) {
             console.log(`Error creating user: ${error}`)
             throw error
@@ -74,7 +75,14 @@ export const useUserAPI = () => {
             }
 
             const result = await response.json()
-        } catch (error) {
+            const updatedData: UserForm[] = userData.map((user) =>
+                user.user_id === id
+                  ? { ...user, role: result.role }
+                  : user
+            )
+           setUserData(updatedData)
+        } 
+        catch (error) {
             console.log(`Error updating user: ${error}`)
             throw error
         }

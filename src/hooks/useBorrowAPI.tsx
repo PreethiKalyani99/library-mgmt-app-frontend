@@ -3,17 +3,11 @@ import { BorrowFormData, GetApiProp } from "../types"
 import { useAuth } from "./useAuth"
 
 export const useBorrowAPI = () => {
-    const { setBorrowData, setCount } = useBorrow()
+    const { setBorrowData, setCount, borrowData } = useBorrow()
     const { token } = useAuth()
     
     const addBorrower = async (newBorrower: BorrowFormData) => {
-        const { return_date, borrow_date } = newBorrower
-
         try {
-            if(return_date && (new Date(borrow_date) >= new Date(return_date))){
-                throw new Error("Borrow date should be earlier than return date")
-            }
-
             const response = await fetch(`${process.env.REACT_APP_BASE_URL}/borrow`, {
                 method: "POST",
                 headers: {
@@ -27,7 +21,8 @@ export const useBorrowAPI = () => {
                 throw new Error(`Failed to add borrower, status: ${response.status}`)
             }
 
-            const result = await response.json()
+            const result: any = await response.json()
+            setBorrowData([{ books: result.books, borrow_date: new Date(result.borrow_date).toISOString().split('T')[0], return_date: result.return_date, users: result.users}, ...borrowData])
         } catch (error) {
             console.log(`Error adding borrower: ${error}`)
             throw error
@@ -114,6 +109,13 @@ export const useBorrowAPI = () => {
             }
 
             const result = await response.json()
+            const updatedData = borrowData.map((item) => 
+                item.id === id ? 
+                    { ...item, return_date: new Date(result.return_date).toISOString().split('T')[0] }
+                :
+                    item
+            )
+            setBorrowData(updatedData)
         } catch (error) {
             console.log(`Error adding borrower: ${error}`)
             throw error

@@ -11,7 +11,6 @@ export const useUserHandlers = () => {
         setIsEdit,
         setRowId,
         userData,
-        roleData,
         setFormData,
         setQuery,
         query,
@@ -24,7 +23,7 @@ export const useUserHandlers = () => {
         setShowRole,
     } = useUser()
     
-    const { getUser, getRoles, updateUser, addUser, createRole } = useUserAPI()
+    const { getUser, updateUser, addUser } = useUserAPI()
     
     const toggleModal = () => {
         setShowModal(!showModal) 
@@ -132,17 +131,14 @@ export const useUserHandlers = () => {
         }
 
         try {
-            // setIsLoading(true)
             await (isEdit ? handleFormEdit() : addUser(formData))
-            setIsLoading(false)
-            setShowModal(false)
+            handleClose()
         } 
         catch (error) {
             console.log(error)
         } 
         finally {
             setIsLoading(false)
-            resetForm()
         }
     }
 
